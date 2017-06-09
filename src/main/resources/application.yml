@@ -11,3 +11,7 @@ spring:
         format_sql: true
         type: trace
 
+jwt:
+  header: Authorization
+  secret: bigSecret
+  expiration: 608400

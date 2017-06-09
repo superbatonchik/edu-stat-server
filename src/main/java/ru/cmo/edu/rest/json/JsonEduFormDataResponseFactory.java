@@ -41,6 +41,7 @@ public class JsonEduFormDataResponseFactory {
                     put("name", m.getName());
                 }
             };
+            municipalityJArray.add(mObj);
         }
         obj.put("municipalities", municipalityJArray);
         return obj;
