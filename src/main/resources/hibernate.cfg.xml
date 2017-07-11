@@ -1,44 +1,49 @@
 <?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE hibernate-configuration PUBLIC
-        "-//Hibernate/Hibernate Configuration DTD//EN"
-        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+    "-//Hibernate/Hibernate Configuration DTD//EN"
+    "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
-    <session-factory>
-        <property name="connection.url">jdbc:postgresql://5.139.217.156:5432/edu_forms_test</property>
-        <property name="connection.driver_class">org.postgresql.Driver</property>
-        <mapping class="ru.cmo.edu.data.entity.ActivityTypeEntity"/>
-        <mapping class="ru.cmo.edu.data.entity.CredentialsEntity"/>
-        <mapping class="ru.cmo.edu.data.entity.DocumentFormatEntity"/>
-        <mapping class="ru.cmo.edu.data.entity.EduEntity"/>
-        <mapping class="ru.cmo.edu.data.entity.EduFormDataEntity"/>
-        <mapping class="ru.cmo.edu.data.entity.EduKindEntity"/>
-        <mapping class="ru.cmo.edu.data.entity.EduStatusEntity"/>
-        <mapping class="ru.cmo.edu.data.entity.EduTypeEntity"/>
-        <mapping class="ru.cmo.edu.data.entity.FileEntity"/>
-        <mapping class="ru.cmo.edu.data.entity.FormEntity"/>
-        <mapping class="ru.cmo.edu.data.entity.FormTypeEntity"/>
-        <mapping class="ru.cmo.edu.data.entity.ManagementAgencyEntity"/>
-        <mapping class="ru.cmo.edu.data.entity.ManagementAgencyActivityEntity"/>
-        <mapping class="ru.cmo.edu.data.entity.MessageEntity"/>
-        <mapping class="ru.cmo.edu.data.entity.MunicipalityEntity"/>
-        <mapping class="ru.cmo.edu.data.entity.MunicipalityFormDataEntity"/>
-        <mapping class="ru.cmo.edu.data.entity.OwnershipTypeEntity"/>
-        <mapping class="ru.cmo.edu.data.entity.QueryEntity"/>
-        <mapping class="ru.cmo.edu.data.entity.QueryAutocompletePartEntity"/>
-        <mapping class="ru.cmo.edu.data.entity.QueryHeadPartEntity"/>
-        <mapping class="ru.cmo.edu.data.entity.RegionEntity"/>
-        <mapping class="ru.cmo.edu.data.entity.RegionFormDataEntity"/>
-        <mapping class="ru.cmo.edu.data.entity.SettlementTypeEntity"/>
-        <mapping class="ru.cmo.edu.data.entity.DetailedFormStatisticsEntity"/>
-        <mapping class="ru.cmo.edu.data.entity.DetailedMunicipalityFormStatisticsEntity"/>
-        <mapping class="ru.cmo.edu.data.entity.FormStatisticsEntity"/>
-        <mapping class="ru.cmo.edu.data.entity.MunicipalityFormStatisticsEntity"/>
-        <mapping class="ru.cmo.edu.data.entity.SummaryFormStatisticsEntity"/>
+  <session-factory>
+    <property name="connection.url">jdbc:postgresql://5.139.217.156:5432/edu_forms_test</property>
+    <property name="connection.driver_class">org.postgresql.Driver</property>
+      <mapping class="ru.cmo.edu.data.entity.ActivityType"/>
+      <mapping class="ru.cmo.edu.data.entity.Credentials"/>
+      <mapping class="ru.cmo.edu.data.entity.DocumentFormat"/>
+      <mapping class="ru.cmo.edu.data.entity.Edu"/>
+      <mapping class="ru.cmo.edu.data.entity.EduFormData"/>
+      <mapping class="ru.cmo.edu.data.entity.EduKind"/>
+      <mapping class="ru.cmo.edu.data.entity.EduStatus"/>
+      <mapping class="ru.cmo.edu.data.entity.EduType"/>
+      <mapping class="ru.cmo.edu.data.entity.File"/>
+      <mapping class="ru.cmo.edu.data.entity.Form"/>
+      <mapping class="ru.cmo.edu.data.entity.FormType"/>
+      <mapping class="ru.cmo.edu.data.entity.ManagementAgency"/>
+      <mapping class="ru.cmo.edu.data.entity.ManagementAgencyActivity"/>
+      <mapping class="ru.cmo.edu.data.entity.Message"/>
+      <mapping class="ru.cmo.edu.data.entity.MmRegularSummaryForm"/>
+      <mapping class="ru.cmo.edu.data.entity.Municipality"/>
+      <mapping class="ru.cmo.edu.data.entity.MunicipalityFormData"/>
+      <mapping class="ru.cmo.edu.data.entity.OwnershipType"/>
+      <mapping class="ru.cmo.edu.data.entity.Query"/>
+      <mapping class="ru.cmo.edu.data.entity.QueryAutocompletePart"/>
+      <mapping class="ru.cmo.edu.data.entity.QueryHeadPart"/>
+      <mapping class="ru.cmo.edu.data.entity.Region"/>
+      <mapping class="ru.cmo.edu.data.entity.RegionFormData"/>
+      <mapping class="ru.cmo.edu.data.entity.SettlementType"/>
+      <mapping class="ru.cmo.edu.data.entity.TDetailedFormStatistics"/>
+      <mapping class="ru.cmo.edu.data.entity.TDetailedMunicipalityFormStatistics"/>
+      <mapping class="ru.cmo.edu.data.entity.TFormStatistics"/>
+      <mapping class="ru.cmo.edu.data.entity.TMunicipalityFormStatistics"/>
+      <mapping class="ru.cmo.edu.data.entity.TSummaryFormStatistics"/>
+      <mapping class="ru.cmo.edu.data.entity.VDetailedFormStatistics"/>
+      <mapping class="ru.cmo.edu.data.entity.VDetailedMunicipalityFormStatistics"/>
+      <mapping class="ru.cmo.edu.data.entity.VFormStatistics"/>
+      <mapping class="ru.cmo.edu.data.entity.VMunicipalityFormStatistics"/>
+      <mapping class="ru.cmo.edu.data.entity.VSummaryFormStatistics"/>
+      <!-- <property name="connection.username"/> -->
+    <!-- <property name="connection.password"/> -->
 
-        <!-- <property name="connection.username"/> -->
-        <!-- <property name="connection.password"/> -->
-
-        <!-- DB schema will be updated if needed -->
-        <!-- <property name="hbm2ddl.auto">update</property> -->
-    </session-factory>
+    <!-- DB schema will be updated if needed -->
+    <!-- <property name="hbm2ddl.auto">update</property> -->
+  </session-factory>
 </hibernate-configuration>

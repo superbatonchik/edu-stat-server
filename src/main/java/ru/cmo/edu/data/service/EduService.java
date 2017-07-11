@@ -2,8 +2,8 @@ package ru.cmo.edu.data.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.cmo.edu.data.entity.EduEntity;
-import ru.cmo.edu.data.repository.EduEntityRepository;
+import ru.cmo.edu.data.entity.Edu;
+import ru.cmo.edu.data.repository.EduRepository;
 
 import java.util.List;
 
@@ -14,10 +14,10 @@ import java.util.List;
 public class EduService {
 
     @Autowired
-    EduEntityRepository eduEntityRepository;
+    EduRepository eduRepository;
 
-    public List<EduEntity> getAllEdus() {
-        return eduEntityRepository.findAll();
+    public List<Edu> getAllEdus() {
+        return eduRepository.findAll();
     }
 
 }

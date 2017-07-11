@@ -10,8 +10,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
+import ru.cmo.edu.data.entity.Edu;
+import ru.cmo.edu.data.entity.EduKind;
+import ru.cmo.edu.data.entity.Municipality;
 import ru.cmo.edu.rest.json.JsonEduFormDataResponseFactory;
+import ru.cmo.edu.service.FormDataService;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,38 +30,38 @@ public class EduFormDataController {
     Logger logger = LoggerFactory.getLogger(EduFormDataController.class);
 
     @Autowired
-    private JsonEduFormDataResponseFactory jsonEduFormDataResponseFactory;
+    private FormDataService formDataService;
 
     @RequestMapping(value = "/municipality", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public Map<String, Object> GetMunicipalityList(@RequestParam String viewingBy, @RequestParam int id) {
+    public ResponseEntity<List<Municipality>> GetMunicipalityList(@RequestParam String viewingBy, @RequestParam int id) {
         switch (viewingBy) {
             case "region": {
-                return jsonEduFormDataResponseFactory.createMunicipalityListForRegion(id);
+                return ResponseEntity.ok(formDataService.getMunicipalities(id));
             }
             default:
-                return null;
+                return ResponseEntity.badRequest().build();
         }
     }
 
     @RequestMapping(value = "/municipality/edukind", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public Map<String, Object> GetEduKindList(@RequestParam String viewingBy, @RequestParam int id) {
+    public ResponseEntity<List<EduKind>> GetEduKindList(@RequestParam String viewingBy, @RequestParam int municipalityId) {
         switch (viewingBy) {
             case "region": {
-                return jsonEduFormDataResponseFactory.createEduKindListByMunicipalityForRegion(id);
+                return ResponseEntity.ok(formDataService.getEduKinds(municipalityId));
             }
             default:
-                return null;
+                return ResponseEntity.badRequest().build();
         }
     }
 
     @RequestMapping(value = "/municipality/edukind/edu", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public Map<String, Object> GetEduList(@RequestParam String viewingBy, @RequestParam int id, @RequestParam int municipalityId, @RequestParam int eduKindId) {
+    public ResponseEntity<List<Edu>> GetEduList(@RequestParam String viewingBy, @RequestParam int id, @RequestParam int municipalityId, @RequestParam int eduKindId) {
         switch (viewingBy) {
             case "region": {
-                return jsonEduFormDataResponseFactory.createEduListByEduKindForRegion(municipalityId, eduKindId);
+                return ResponseEntity.ok(formDataService.getEdus(municipalityId, eduKindId));
             }
             default:
-                return null;
+                return ResponseEntity.badRequest().build();
         }
     }
 }
