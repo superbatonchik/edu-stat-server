@@ -1,5 +1,7 @@
 package ru.cmo.edu.data.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.Collection;
@@ -97,7 +99,7 @@ public class Edu {
     }
 
     @Basic
-    @Column(name = "municipality_id")
+    @Column(name = "municipality_id", insertable = false, updatable = false)
     public Integer getMunicipalityId() {
         return municipalityId;
     }
@@ -107,7 +109,7 @@ public class Edu {
     }
 
     @Basic
-    @Column(name = "edu_kind_id")
+    @Column(name = "edu_kind_id", insertable = false, updatable = false)
     public Integer getEduKindId() {
         return eduKindId;
     }
@@ -117,7 +119,7 @@ public class Edu {
     }
 
     @Basic
-    @Column(name = "status_id")
+    @Column(name = "status_id", insertable = false, updatable = false)
     public Integer getStatusId() {
         return statusId;
     }
@@ -187,7 +189,7 @@ public class Edu {
     }
 
     @Basic
-    @Column(name = "ownership_type_id")
+    @Column(name = "ownership_type_id", insertable = false, updatable = false)
     public Integer getOwnershipTypeId() {
         return ownershipTypeId;
     }
@@ -197,7 +199,7 @@ public class Edu {
     }
 
     @Basic
-    @Column(name = "edu_type_id")
+    @Column(name = "edu_type_id", insertable = false, updatable = false)
     public Integer getEduTypeId() {
         return eduTypeId;
     }
@@ -377,7 +379,7 @@ public class Edu {
     }
 
     @Basic
-    @Column(name = "settlement_type_id")
+    @Column(name = "settlement_type_id", insertable = false, updatable = false)
     public Integer getSettlementTypeId() {
         return settlementTypeId;
     }
@@ -476,7 +478,7 @@ public class Edu {
         return result;
     }
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "municipality_id", referencedColumnName = "id")
     public Municipality getMunicipality() {
         return municipality;

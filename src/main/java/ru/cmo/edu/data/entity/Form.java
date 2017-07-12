@@ -68,7 +68,7 @@ public class Form {
     }
 
     @Basic
-    @Column(name = "form_type_id")
+    @Column(name = "form_type_id", insertable = false, updatable = false)
     public int getFormTypeId() {
         return formTypeId;
     }
@@ -78,7 +78,7 @@ public class Form {
     }
 
     @Basic
-    @Column(name = "template_file_id")
+    @Column(name = "template_file_id", insertable = false, updatable = false)
     public Integer getTemplateFileId() {
         return templateFileId;
     }
@@ -88,7 +88,7 @@ public class Form {
     }
 
     @Basic
-    @Column(name = "check_file_id")
+    @Column(name = "check_file_id", insertable = false, updatable = false)
     public Integer getCheckFileId() {
         return checkFileId;
     }
@@ -108,7 +108,7 @@ public class Form {
     }
 
     @Basic
-    @Column(name = "check_data_file_id")
+    @Column(name = "check_data_file_id", insertable = false, updatable = false)
     public Integer getCheckDataFileId() {
         return checkDataFileId;
     }
@@ -177,7 +177,7 @@ public class Form {
         this.formTypeByFormTypeId = formTypeByFormTypeId;
     }
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "template_file_id", referencedColumnName = "id")
     public File getTemplate() {
         return template;
@@ -187,7 +187,7 @@ public class Form {
         this.template = template;
     }
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "check_file_id", referencedColumnName = "id")
     public File getCheckFile() {
         return checkFile;
@@ -197,7 +197,7 @@ public class Form {
         this.checkFile = checkFile;
     }
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "check_data_file_id", referencedColumnName = "id")
     public File getCheckDataFile() {
         return checkDataFile;

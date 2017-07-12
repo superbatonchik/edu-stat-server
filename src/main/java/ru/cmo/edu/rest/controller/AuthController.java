@@ -9,17 +9,14 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 import ru.cmo.edu.exception.InvalidTokenException;
-import ru.cmo.edu.rest.json.JsonEduFormDataResponseFactory;
 import ru.cmo.edu.rest.security.UserRequest;
 import ru.cmo.edu.service.JwtService;
 
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by to on 05.06.2017.

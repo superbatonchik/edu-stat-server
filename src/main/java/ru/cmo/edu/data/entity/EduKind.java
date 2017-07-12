@@ -55,7 +55,6 @@ public class EduKind {
         return result;
     }
 
-    @JsonIgnore
     @OneToMany(mappedBy = "eduKind")
     public Set<Edu> getEdus() {
         return edus;

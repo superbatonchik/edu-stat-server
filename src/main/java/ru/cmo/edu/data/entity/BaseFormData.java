@@ -1,5 +1,7 @@
 package ru.cmo.edu.data.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.sql.Date;
 
@@ -29,7 +31,7 @@ public class BaseFormData {
     }
 
     @Basic
-    @Column(name = "document_format_id")
+    @Column(name = "document_format_id", insertable = false, updatable = false)
     public int getDocumentFormatId() {
         return documentFormatId;
     }
@@ -39,7 +41,7 @@ public class BaseFormData {
     }
 
     @Basic
-    @Column(name = "form_id")
+    @Column(name = "form_id", insertable = false, updatable = false)
     public int getFormId() {
         return formId;
     }
@@ -69,7 +71,7 @@ public class BaseFormData {
     }
 
     @Basic
-    @Column(name = "file_id")
+    @Column(name = "file_id", insertable = false, updatable = false)
     public int getFileId() {
         return fileId;
     }
@@ -126,7 +128,7 @@ public class BaseFormData {
         this.form = form;
     }
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "file_id", referencedColumnName = "id", nullable = false)
     public File getFile() {
         return file;

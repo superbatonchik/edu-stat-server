@@ -8,9 +8,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import ru.cmo.edu.data.entity.CredentialsEntity;
+import ru.cmo.edu.data.entity.Credentials;
 import ru.cmo.edu.data.entity.enumerable.CredentialsTypeEnum;
-import ru.cmo.edu.data.repository.CredentialsEntityRepository;
+import ru.cmo.edu.data.repository.CredentialsRepository;
+import ru.cmo.edu.rest.security.Role;
 
 import java.util.List;
 
@@ -21,26 +22,26 @@ import java.util.List;
 public class JpaUserDetailsService implements UserDetailsService {
 
     @Autowired
-    CredentialsEntityRepository credentialsEntityRepository;
+    CredentialsRepository credentialsEntityRepository;
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        CredentialsEntity credentials = credentialsEntityRepository.findByLogin(s);
+        Credentials credentials = credentialsEntityRepository.findByLogin(s);
         if (credentials != null) {
             CredentialsTypeEnum credentialsType = CredentialsTypeEnum.get(credentials.getLoginType());
             List<GrantedAuthority> authorities = null;
             switch (credentialsType) {
-                case admin:
-                    authorities = AuthorityUtils.createAuthorityList("ADMIN");
+                case REGION:
+                    authorities = AuthorityUtils.createAuthorityList(String.valueOf(Role.REGION));
                     break;
-                case ministry:
-                    authorities = AuthorityUtils.createAuthorityList("MINISTRY");
+                case MINISTRY:
+                    authorities = AuthorityUtils.createAuthorityList(String.valueOf(Role.MINISTRY));
                     break;
-                case municipality:
-                    authorities = AuthorityUtils.createAuthorityList("MUNICIPALITY");
+                case MUNICIPALITY:
+                    authorities = AuthorityUtils.createAuthorityList(String.valueOf(Role.MUNICIPALITY));
                     break;
-                case edu:
-                    authorities = AuthorityUtils.createAuthorityList("EDU");
+                case EDU:
+                    authorities = AuthorityUtils.createAuthorityList(String.valueOf(Role.EDU));
                     break;
             }
             return new User(credentials.getLogin(), credentials.getPasswd(), authorities);

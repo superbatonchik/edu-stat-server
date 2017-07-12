@@ -13,7 +13,7 @@ public class MunicipalityFormData extends BaseFormData {
     private Municipality municipality;
 
     @Basic
-    @Column(name = "municipality_id")
+    @Column(name = "municipality_id", insertable = false, updatable = false)
     public int getMunicipalityId() {
         return municipalityId;
     }
@@ -41,7 +41,7 @@ public class MunicipalityFormData extends BaseFormData {
         return result;
     }
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "municipality_id", referencedColumnName = "id", nullable = false)
     public Municipality getMunicipality() {
         return municipality;

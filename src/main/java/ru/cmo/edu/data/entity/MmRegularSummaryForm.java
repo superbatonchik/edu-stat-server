@@ -17,7 +17,7 @@ public class MmRegularSummaryForm {
     private Form summaryForm;
 
     @Basic
-    @Column(name = "regular_form_id")
+    @Column(name = "regular_form_id", insertable = false, updatable = false)
     public int getRegularFormId() {
         return regularFormId;
     }
@@ -27,7 +27,7 @@ public class MmRegularSummaryForm {
     }
 
     @Basic
-    @Column(name = "summary_form_id")
+    @Column(name = "summary_form_id", insertable = false, updatable = false)
     public int getSummaryFormId() {
         return summaryFormId;
     }

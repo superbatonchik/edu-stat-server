@@ -13,7 +13,7 @@ public class EduFormData extends BaseFormData {
     private Edu edu;
 
     @Basic
-    @Column(name = "edu_id")
+    @Column(name = "edu_id", insertable = false, updatable = false)
     public int getEduId() {
         return eduId;
     }
@@ -41,7 +41,7 @@ public class EduFormData extends BaseFormData {
         return result;
     }
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "edu_id", referencedColumnName = "id", nullable = false)
     public Edu getEdu() {
         return edu;

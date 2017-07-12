@@ -47,7 +47,7 @@ public class Message {
     }
 
     @Basic
-    @Column(name = "from_edu_id")
+    @Column(name = "from_edu_id", insertable = false, updatable = false)
     public int getFromEduId() {
         return fromEduId;
     }

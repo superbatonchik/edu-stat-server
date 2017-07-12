@@ -1,9 +1,6 @@
 package ru.cmo.edu.data.entity;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Created by to on 11.07.2017.
@@ -21,7 +18,7 @@ public class VMunicipalityFormStatistics {
     private Long badCount;
     private Long loadedCount;
 
-    @Basic
+    @Id
     @Column(name = "row_id")
     public Long getRowId() {
         return rowId;

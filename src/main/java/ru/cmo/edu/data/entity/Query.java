@@ -36,7 +36,7 @@ public class Query {
     }
 
     @Basic
-    @Column(name = "form_id")
+    @Column(name = "form_id", insertable = false, updatable = false)
     public int getFormId() {
         return formId;
     }
@@ -56,7 +56,7 @@ public class Query {
     }
 
     @Basic
-    @Column(name = "credentials_id")
+    @Column(name = "credentials_id", insertable = false, updatable = false)
     public int getCredentialsId() {
         return credentialsId;
     }

@@ -137,7 +137,6 @@ public class Municipality {
         return result;
     }
 
-    @JsonIgnore
     @OneToMany(mappedBy = "municipality")
     public Set<Edu> getEdus() {
         return edus;
@@ -147,7 +146,6 @@ public class Municipality {
         this.edus = edus;
     }
 
-    @JsonIgnore
     @OneToMany(mappedBy = "municipality")
     public Set<MunicipalityFormData> getMunicipalityFormDatas() {
         return municipalityFormDatas;
@@ -157,7 +155,6 @@ public class Municipality {
         this.municipalityFormDatas = municipalityFormDatas;
     }
 
-    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "mm_municipality__blocked_form", catalog = "edu_forms_test", schema = "public", joinColumns = @JoinColumn(name = "municipality_id", referencedColumnName = "id", nullable = false), inverseJoinColumns = @JoinColumn(name = "form_id", referencedColumnName = "id", nullable = false))
     public Set<Form> getBlockedForms() {

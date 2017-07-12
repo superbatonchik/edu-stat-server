@@ -13,7 +13,7 @@ public class RegionFormData extends BaseFormData {
     private Region region;
 
     @Basic
-    @Column(name = "region_id")
+    @Column(name = "region_id", insertable = false, updatable = false)
     public int getRegionId() {
         return regionId;
     }
@@ -39,7 +39,7 @@ public class RegionFormData extends BaseFormData {
         return result;
     }
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "region_id", referencedColumnName = "id", nullable = false)
     public Region getRegion() {
         return region;
