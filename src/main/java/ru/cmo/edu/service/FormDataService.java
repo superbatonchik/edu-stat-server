@@ -8,6 +8,7 @@ import ru.cmo.edu.data.entity.EduKind;
 import ru.cmo.edu.data.entity.Municipality;
 import ru.cmo.edu.data.repository.*;
 
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -39,8 +40,13 @@ public class FormDataService {
         return edus;
     }
 
-    public List<EduFormData> getEduFormDatas(int eduId) {
-        List<EduFormData> eduFormDatas = eduFormDataRepository.findAll(eduId);
+    public List<EduFormData> getEduFormDatas(int eduId, boolean isArchived) {
+        List<EduFormData> eduFormDatas;
+        if (isArchived) {
+             eduFormDatas = eduFormDataRepository.findAllArchived(eduId);
+        } else {
+            eduFormDatas = eduFormDataRepository.findAll(eduId);
+        }
         return eduFormDatas;
     }
 }

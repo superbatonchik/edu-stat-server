@@ -14,7 +14,7 @@ public class MunicipalityResource extends ResourceSupport {
         this.municipalityDto = dto;
     }
 
-    @JsonProperty("municipality")
+    @JsonProperty("object")
     public MunicipalityCoreDto getMunicipalityDto() {
         return municipalityDto;
     }

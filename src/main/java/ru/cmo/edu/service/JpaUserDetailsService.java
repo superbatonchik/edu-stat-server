@@ -32,16 +32,16 @@ public class JpaUserDetailsService implements UserDetailsService {
             List<GrantedAuthority> authorities = null;
             switch (credentialsType) {
                 case REGION:
-                    authorities = AuthorityUtils.createAuthorityList(String.valueOf(Role.REGION));
+                    authorities = AuthorityUtils.createAuthorityList(String.valueOf(Role.region));
                     break;
                 case MINISTRY:
-                    authorities = AuthorityUtils.createAuthorityList(String.valueOf(Role.MINISTRY));
+                    authorities = AuthorityUtils.createAuthorityList(String.valueOf(Role.ministry));
                     break;
                 case MUNICIPALITY:
-                    authorities = AuthorityUtils.createAuthorityList(String.valueOf(Role.MUNICIPALITY));
+                    authorities = AuthorityUtils.createAuthorityList(String.valueOf(Role.municipality));
                     break;
                 case EDU:
-                    authorities = AuthorityUtils.createAuthorityList(String.valueOf(Role.EDU));
+                    authorities = AuthorityUtils.createAuthorityList(String.valueOf(Role.edu));
                     break;
             }
             return new User(credentials.getLogin(), credentials.getPasswd(), authorities);
