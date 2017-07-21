@@ -12,11 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ru.cmo.edu.data.dto.*;
-import ru.cmo.edu.data.resource.MunicipalityResource;
+import ru.cmo.edu.data.dto.RegionCoreDto;
+import ru.cmo.edu.data.dto.RegionFormDataCoreDto;
+import ru.cmo.edu.data.resource.RegionResource;
 import ru.cmo.edu.rest.security.Role;
 import ru.cmo.edu.service.FormDataService;
-import ru.cmo.edu.service.MunicipalityService;
+import ru.cmo.edu.service.RegionService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,17 +31,17 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
  */
 
 @RestController
-@RequestMapping(value = "/view/municipalityformdata")
-public class MunicipalityFormDataController extends BaseController {
+@RequestMapping(value = "/view/regionformdata")
+public class RegionFormDataController extends BaseController {
 
-    Logger logger = LoggerFactory.getLogger(MunicipalityFormDataController.class);
+    Logger logger = LoggerFactory.getLogger(RegionFormDataController.class);
 
     @Autowired
     private FormDataService formDataService;
     @Autowired
-    private MunicipalityService municipalityService;
+    private RegionService regionService;
 
-    @PreAuthorize("hasAnyRole('region', 'ministry', 'municipality')")
+    @PreAuthorize("hasAnyRole('region', 'ministry')")
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity index(@RequestParam int id,
                                 @RequestParam(required = false, defaultValue = "false") boolean isArchived) {
@@ -48,42 +49,42 @@ public class MunicipalityFormDataController extends BaseController {
         if (role == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        Link navLink = linkTo(MunicipalityFormDataController.class).withSelfRel();
+        Link navLink = linkTo(RegionFormDataController.class).withSelfRel();
         switch(role) {
-            case region:
             case ministry:
-                navLink = linkTo(methodOn(MunicipalityFormDataController.class).getMunicipalityList(id)).withSelfRel();
+                navLink = linkTo(methodOn(RegionFormDataController.class).getRegionList()).withSelfRel();
+                break;
+            case region:
+                navLink = linkTo(methodOn(RegionFormDataController.class).getFormList(id, isArchived)).withSelfRel();
                 break;
             case municipality:
-                navLink = linkTo(methodOn(MunicipalityFormDataController.class).getFormList(id, isArchived)).withSelfRel();
-                break;
             case edu:
-                throw new AccessDeniedException("Edu can not access municipality forms");
+                throw new AccessDeniedException("Edu, municipality can not access municipality forms");
         }
         return ResponseEntity.ok(navLink);
     }
 
-    @PreAuthorize("hasAnyRole('region', 'ministry')")
-    @RequestMapping(value = "/municipality", method = RequestMethod.GET)
-    public ResponseEntity getMunicipalityList(@RequestParam int regionId) {
-        List<MunicipalityCoreDto> dtos = municipalityService.getAllDto(MunicipalityCoreDto.class, regionId);
-        List<MunicipalityResource> resources = dtos.stream().map(t ->
+    @PreAuthorize("hasAnyRole('ministry')")
+    @RequestMapping(value = "/region", method = RequestMethod.GET)
+    public ResponseEntity getRegionList() {
+        List<RegionCoreDto> dtos = regionService.getAllDto(RegionCoreDto.class);
+        List<RegionResource> resources = dtos.stream().map(t ->
         {
-            MunicipalityResource resource = new MunicipalityResource(t);
+            RegionResource resource = new RegionResource(t);
             List<Link> navigateToFormLinks = new ArrayList<>();
-            navigateToFormLinks.add(linkTo(methodOn(MunicipalityFormDataController.class).getFormList(t.getId(), false)).withRel("actual"));
-            navigateToFormLinks.add(linkTo(methodOn(MunicipalityFormDataController.class).getFormList(t.getId(), true)).withRel("archived"));
+            navigateToFormLinks.add(linkTo(methodOn(RegionFormDataController.class).getFormList(t.getId(), false)).withRel("actual"));
+            navigateToFormLinks.add(linkTo(methodOn(RegionFormDataController.class).getFormList(t.getId(), true)).withRel("archived"));
             resource.add(navigateToFormLinks);
             return resource;
         }).collect(Collectors.toList());
         return ResponseEntity.ok(resources);
     }
 
-    @PreAuthorize("hasAnyRole('region', 'ministry', 'municipality')")
+    @PreAuthorize("hasAnyRole('region', 'ministry')")
     @RequestMapping(value = "/form", method = RequestMethod.GET)
-    public ResponseEntity getFormList(@RequestParam int municipalityId,
+    public ResponseEntity getFormList(@RequestParam int regionId,
                                       @RequestParam boolean isArchived) {
-        List<MunicipalityFormDataCoreDto> dtos = formDataService.getMunicipalityFormDataDto(municipalityId, isArchived);
+        List<RegionFormDataCoreDto> dtos = formDataService.getRegionFormDataDto(regionId, isArchived);
         return ResponseEntity.ok(dtos);
     }
 }

@@ -46,7 +46,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping(value = "/view/eduformdata")
-public class EduFormDataController {
+public class EduFormDataController extends BaseController {
 
     Logger logger = LoggerFactory.getLogger(EduFormDataController.class);
 
@@ -62,14 +62,7 @@ public class EduFormDataController {
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity index(@RequestParam int id,
                                 @RequestParam(required = false, defaultValue = "false") boolean isArchived) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Role role = null;
-        for (GrantedAuthority authority : auth.getAuthorities()) {
-            try {
-                role = Role.valueOf(authority.getAuthority());
-                break;
-            } catch (IllegalArgumentException e) {}
-        }
+        Role role = getRole();
         if (role == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
@@ -89,7 +82,7 @@ public class EduFormDataController {
         return ResponseEntity.ok(navLink);
     }
 
-    @PreAuthorize("hasAnyRole('admin', 'ministry')")
+    @PreAuthorize("hasAnyRole('region', 'ministry')")
     @RequestMapping(value = "/municipality", method = RequestMethod.GET)
     public ResponseEntity getMunicipalityList(@RequestParam int regionId) {
         List<MunicipalityCoreDto> dtos = municipalityService.getAllDto(MunicipalityCoreDto.class, regionId);
@@ -105,7 +98,7 @@ public class EduFormDataController {
         return ResponseEntity.ok(resources);
     }
 
-    @PreAuthorize("hasAnyRole('admin', 'ministry', 'municipality')")
+    @PreAuthorize("hasAnyRole('region', 'ministry', 'municipality')")
     @RequestMapping(value = "/edukind", method = RequestMethod.GET)
     public ResponseEntity getEduKindList(@RequestParam int municipalityId) {
         List<EduKindCoreDto> dtos = eduKindService.getAllDto(EduKindCoreDto.class, municipalityId);
@@ -120,7 +113,7 @@ public class EduFormDataController {
         return ResponseEntity.ok(resources);
     }
 
-    @PreAuthorize("hasAnyRole('admin', 'ministry', 'municipality')")
+    @PreAuthorize("hasAnyRole('region', 'ministry', 'municipality')")
     @RequestMapping(value = "/edu", method = RequestMethod.GET)
     public ResponseEntity getEduList(@RequestParam int municipalityId, @RequestParam int eduKindId) {
         List<EduCoreDto> dtos = eduService.getAllDto(EduCoreDto.class, municipalityId, eduKindId);
@@ -135,7 +128,7 @@ public class EduFormDataController {
         return ResponseEntity.ok(resources);
     }
 
-    @PreAuthorize("hasAnyRole('admin', 'ministry', 'municipality', 'edu')")
+    @PreAuthorize("hasAnyRole('region', 'ministry', 'municipality', 'edu')")
     @RequestMapping(value = "/form", method = RequestMethod.GET)
     public ResponseEntity getFormList(@RequestParam int eduId, @RequestParam boolean isArchived) {
         List<EduFormDataCoreDto> dtos = formDataService.getEduFormDataDto(eduId, isArchived);
