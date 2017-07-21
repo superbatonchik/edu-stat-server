@@ -14,6 +14,9 @@ import java.util.List;
 @Repository
 public interface EduKindRepository extends CrudRepository<EduKind, Integer> {
 
+    @Query("select distinct ek from EduKind ek order by ek.name ")
+    List<EduKind> findAll();
+
     @Query("select distinct ek from EduKind ek join ek.edus e where e.municipalityId = ?1 order by ek.name ")
     List<EduKind> findAll(int municipalityId);
 }

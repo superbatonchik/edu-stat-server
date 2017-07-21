@@ -1,14 +1,12 @@
 package ru.cmo.edu.data.entity;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * Created by to on 11.07.2017.
  */
 @Entity
+@Table(name = "credentials", schema = "public", catalog = "edu_forms_test")
 public class Credentials {
     private String login;
     private String passwd;

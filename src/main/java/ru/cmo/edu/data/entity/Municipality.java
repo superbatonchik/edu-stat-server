@@ -1,7 +1,5 @@
 package ru.cmo.edu.data.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.util.Set;
 
@@ -9,9 +7,8 @@ import java.util.Set;
  * Created by to on 11.07.2017.
  */
 @Entity
-public class Municipality {
-    private int id;
-    private String name;
+@Table(name = "municipality", schema = "public", catalog = "edu_forms_test")
+public class Municipality extends BaseUser {
     private String operator;
     private String remark;
     private String phone;
@@ -21,26 +18,6 @@ public class Municipality {
     private Set<Edu> edus;
     private Set<MunicipalityFormData> municipalityFormDatas;
     private Set<Form> blockedForms;
-
-    @Id
-    @Column(name = "id")
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    @Basic
-    @Column(name = "name")
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     @Basic
     @Column(name = "operator")
@@ -109,8 +86,8 @@ public class Municipality {
 
         Municipality that = (Municipality) o;
 
-        if (id != that.id) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (super.getId() != that.getId()) return false;
+        if (super.getName() != null ? !super.getName().equals(that.getName()) : that.getName() != null) return false;
         if (operator != null ? !operator.equals(that.operator) : that.operator != null) return false;
         if (remark != null ? !remark.equals(that.remark) : that.remark != null) return false;
         if (phone != null ? !phone.equals(that.phone) : that.phone != null) return false;
@@ -126,8 +103,7 @@ public class Municipality {
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
+        int result = super.hashCode();
         result = 31 * result + (operator != null ? operator.hashCode() : 0);
         result = 31 * result + (remark != null ? remark.hashCode() : 0);
         result = 31 * result + (phone != null ? phone.hashCode() : 0);

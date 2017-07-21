@@ -7,30 +7,9 @@ import java.util.Set;
  * Created by to on 11.07.2017.
  */
 @Entity
-public class Region {
-    private int id;
-    private String name;
+@Table(name = "region", schema = "public", catalog = "edu_forms_test")
+public class Region extends BaseUser {
     private Set<RegionFormData> regionFormDatas;
-
-    @Id
-    @Column(name = "id")
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    @Basic
-    @Column(name = "name")
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -39,16 +18,15 @@ public class Region {
 
         Region region = (Region) o;
 
-        if (id != region.id) return false;
-        if (name != null ? !name.equals(region.name) : region.name != null) return false;
+        if (super.getId() != region.getId()) return false;
+        if (super.getName() != null ? !super.getName().equals(region.getName()) : region.getName() != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + (name != null ? name.hashCode() : 0);
+        int result = super.hashCode();
         return result;
     }
 

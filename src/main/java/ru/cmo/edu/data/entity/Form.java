@@ -8,6 +8,7 @@ import java.util.Set;
  * Created by to on 11.07.2017.
  */
 @Entity
+@Table(name = "form", schema = "public", catalog = "edu_forms_test")
 public class Form {
     private int id;
     private String name;

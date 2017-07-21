@@ -6,6 +6,7 @@ import javax.persistence.*;
  * Created by to on 11.07.2017.
  */
 @Entity
+@Table(name = "query", schema = "public", catalog = "edu_forms_test")
 public class Query {
     private int queryId;
     private String title;

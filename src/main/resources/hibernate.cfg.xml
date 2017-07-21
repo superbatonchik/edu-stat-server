@@ -40,8 +40,8 @@
       <mapping class="ru.cmo.edu.data.entity.VFormStatistics"/>
       <mapping class="ru.cmo.edu.data.entity.VMunicipalityFormStatistics"/>
       <mapping class="ru.cmo.edu.data.entity.VSummaryFormStatistics"/>
-      <!-- <property name="connection.username"/> -->
-    <!-- <property name="connection.password"/> -->
+    <property name="connection.username">user</property>
+    <property name="connection.password">qwer1234</property>
 
     <!-- DB schema will be updated if needed -->
     <!-- <property name="hbm2ddl.auto">update</property> -->

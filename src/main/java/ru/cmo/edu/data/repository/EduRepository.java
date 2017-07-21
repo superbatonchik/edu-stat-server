@@ -19,11 +19,10 @@ public interface EduRepository extends CrudRepository<Edu, Integer> {
     @Query(value = "select e from Edu e order by e.sysName, e.eduNumber asc")
     List<Edu> findAll();
 
-    @Query(value = "select e from Edu e where e.municipality = ?1 order by e.name, e.eduNumber asc")
-    List<Edu> findByMunicipality(Municipality municipality);
-
-    List<Edu> findByMunicipalityAndEduKind(Municipality municipality, EduKind eduKind);
+    @Query(value = "select e from Edu e where e.municipalityId = ?1 order by e.name, e.eduNumber asc")
+    List<Edu> findAll(int municipalityId);
 
     @Query(value = "select e from Edu e where e.municipalityId = ?1 and e.eduKindId = ?2 order by e.sysName, e.eduNumber asc")
     List<Edu> findAll(int municipalityId, int eduKindId);
 }
+

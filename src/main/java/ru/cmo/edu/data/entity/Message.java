@@ -7,6 +7,7 @@ import java.util.Date;
  * Created by to on 11.07.2017.
  */
 @Entity
+@Table(name = "message", schema = "public", catalog = "edu_forms_test")
 public class Message {
     private int id;
     private String subject;

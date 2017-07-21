@@ -16,4 +16,8 @@ public interface MunicipalityRepository extends CrudRepository<Municipality, Int
 
     @Query("select m from Municipality m order by m.name")
     List<Municipality> findAll();
+
+    //poka ne nuzhno
+    @Query("select m from Municipality m order by m.name")
+    List<Municipality> findAll(int regionId);
 }

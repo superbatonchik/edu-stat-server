@@ -1,7 +1,5 @@
 package ru.cmo.edu.data.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.Collection;
@@ -11,10 +9,9 @@ import java.util.Set;
  * Created by to on 11.07.2017.
  */
 @Entity
-public class Edu {
-    private int id;
+@Table(name = "edu", schema = "public", catalog = "edu_forms_test")
+public class Edu extends BaseUser {
     private String fullname;
-    private String name;
     private String operator;
     private Integer municipalityId;
     private Integer eduKindId;
@@ -58,16 +55,6 @@ public class Edu {
     private Set<ManagementAgency> managementAgencies;
     private Set<ManagementAgencyActivity> managementAgencyActivities;
 
-    @Id
-    @Column(name = "id")
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
     @Basic
     @Column(name = "fullname")
     public String getFullname() {
@@ -76,16 +63,6 @@ public class Edu {
 
     public void setFullname(String fullname) {
         this.fullname = fullname;
-    }
-
-    @Basic
-    @Column(name = "name")
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     @Basic
@@ -395,12 +372,12 @@ public class Edu {
 
         Edu edu = (Edu) o;
 
-        if (id != edu.id) return false;
+        if (super.getId() != edu.getId()) return false;
         if (isUngraded != edu.isUngraded) return false;
         if (branchNum != edu.branchNum) return false;
         if (managementAgencyHasAuthority != edu.managementAgencyHasAuthority) return false;
         if (fullname != null ? !fullname.equals(edu.fullname) : edu.fullname != null) return false;
-        if (name != null ? !name.equals(edu.name) : edu.name != null) return false;
+        if (super.getName() != null ? !super.getName().equals(edu.getName()) : edu.getName() != null) return false;
         if (operator != null ? !operator.equals(edu.operator) : edu.operator != null) return false;
         if (municipalityId != null ? !municipalityId.equals(edu.municipalityId) : edu.municipalityId != null)
             return false;
@@ -442,9 +419,8 @@ public class Edu {
 
     @Override
     public int hashCode() {
-        int result = id;
+        int result = super.hashCode();
         result = 31 * result + (fullname != null ? fullname.hashCode() : 0);
-        result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (operator != null ? operator.hashCode() : 0);
         result = 31 * result + (municipalityId != null ? municipalityId.hashCode() : 0);
         result = 31 * result + (eduKindId != null ? eduKindId.hashCode() : 0);

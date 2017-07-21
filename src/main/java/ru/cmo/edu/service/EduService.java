@@ -1,23 +1,56 @@
 package ru.cmo.edu.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.cmo.edu.data.dto.EduCoreDto;
 import ru.cmo.edu.data.entity.Edu;
 import ru.cmo.edu.data.repository.EduRepository;
 
-import java.util.List;
 
-/**
- * Created by to on 06.06.2017.
- */
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class EduService {
 
-    @Autowired
-    EduRepository eduEntityRepository;
+    private Logger logger = LoggerFactory.getLogger(EduKindService.class);
 
-    public List<Edu> getAllEdus() {
-        return eduEntityRepository.findAll();
+    @Autowired
+    private EduRepository eduRepository;
+
+    public <T extends EduCoreDto> List<T> getAllDto(Class<T> clazz) {
+        return eduRepository.findAll().stream().map(t -> {
+            try {
+                return clazz.getDeclaredConstructor(Edu.class).newInstance(t);
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                logger.error(e.getMessage(), e);
+                return (T) new EduCoreDto(t);
+            }
+        }).collect(Collectors.toList());
     }
 
+    public <T extends EduCoreDto> List<T> getAllDto(Class<T> clazz, int municipalityId) {
+        return eduRepository.findAll(municipalityId).stream().map(t -> {
+            try {
+                return clazz.getDeclaredConstructor(Edu.class).newInstance(t);
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                logger.error(e.getMessage(), e);
+                return (T) new EduCoreDto(t);
+            }
+        }).collect(Collectors.toList());
+    }
+
+    public <T extends EduCoreDto> List<T> getAllDto(Class<T> clazz, int municipalityId, int eduKindId) {
+        return eduRepository.findAll(municipalityId, eduKindId).stream().map(t -> {
+            try {
+                return clazz.getDeclaredConstructor(Edu.class).newInstance(t);
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                logger.error(e.getMessage(), e);
+                return (T) new EduCoreDto(t);
+            }
+        }).collect(Collectors.toList());
+    }
 }
