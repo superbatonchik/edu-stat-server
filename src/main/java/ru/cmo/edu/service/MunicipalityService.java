@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import ru.cmo.edu.data.dto.MunicipalityCoreDto;
 import ru.cmo.edu.data.entity.Municipality;
 import ru.cmo.edu.data.repository.MunicipalityRepository;
-import ru.cmo.edu.rest.controller.EduFormDataController;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -19,8 +18,12 @@ public class MunicipalityService {
 
     private Logger logger = LoggerFactory.getLogger(MunicipalityService.class);
 
+    private final MunicipalityRepository municipalityRepository;
+
     @Autowired
-    private MunicipalityRepository municipalityRepository;
+    public MunicipalityService(MunicipalityRepository municipalityRepository) {
+        this.municipalityRepository = municipalityRepository;
+    }
 
     public <T extends MunicipalityCoreDto> List<T> getAllDto(Class<T> clazz) {
         return municipalityRepository.findAll().stream().map(t -> {

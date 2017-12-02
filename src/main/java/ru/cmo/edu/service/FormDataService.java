@@ -2,14 +2,12 @@ package ru.cmo.edu.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.cmo.edu.data.dto.EduCoreDto;
 import ru.cmo.edu.data.dto.EduFormDataCoreDto;
 import ru.cmo.edu.data.dto.MunicipalityFormDataCoreDto;
 import ru.cmo.edu.data.dto.RegionFormDataCoreDto;
 import ru.cmo.edu.data.entity.*;
 import ru.cmo.edu.data.repository.*;
 
-import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,14 +17,18 @@ import java.util.stream.Collectors;
 @Service
 public class FormDataService {
 
-    @Autowired
-    private EduFormDataRepository eduFormDataRepository;
+    private final EduFormDataRepository eduFormDataRepository;
+
+    private final MunicipalityFormDataRepository municipalityFormDataRepository;
+
+    private final RegionFormDataRepository regionFormDataRepository;
 
     @Autowired
-    private MunicipalityFormDataRepository municipalityFormDataRepository;
-
-    @Autowired
-    private RegionFormDataRepository regionFormDataRepository;
+    public FormDataService(EduFormDataRepository eduFormDataRepository, MunicipalityFormDataRepository municipalityFormDataRepository, RegionFormDataRepository regionFormDataRepository) {
+        this.eduFormDataRepository = eduFormDataRepository;
+        this.municipalityFormDataRepository = municipalityFormDataRepository;
+        this.regionFormDataRepository = regionFormDataRepository;
+    }
 
     public List<EduFormDataCoreDto> getEduFormDataDto(int eduId, boolean isArchived) {
         List<EduFormData> eduFormDatas;

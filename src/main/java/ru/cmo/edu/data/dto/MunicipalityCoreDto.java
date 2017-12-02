@@ -1,12 +1,6 @@
 package ru.cmo.edu.data.dto;
 
-import ru.cmo.edu.data.entity.Edu;
-import ru.cmo.edu.data.entity.Form;
 import ru.cmo.edu.data.entity.Municipality;
-import ru.cmo.edu.data.entity.MunicipalityFormData;
-
-import javax.persistence.*;
-import java.util.Set;
 
 /**
  * Created by to on 12.07.2017.

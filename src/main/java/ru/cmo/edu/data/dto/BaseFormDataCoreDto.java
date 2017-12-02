@@ -1,8 +1,6 @@
 package ru.cmo.edu.data.dto;
 
 import ru.cmo.edu.data.entity.BaseFormData;
-import ru.cmo.edu.data.entity.DocumentFormat;
-import ru.cmo.edu.data.entity.Form;
 
 import java.sql.Date;
 

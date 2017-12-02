@@ -36,10 +36,13 @@ public class RegionFormDataController extends BaseController {
 
     Logger logger = LoggerFactory.getLogger(RegionFormDataController.class);
 
-    @Autowired
-    private FormDataService formDataService;
-    @Autowired
-    private RegionService regionService;
+    private final FormDataService formDataService;
+    private final RegionService regionService;
+
+    public RegionFormDataController(FormDataService formDataService, RegionService regionService) {
+        this.formDataService = formDataService;
+        this.regionService = regionService;
+    }
 
     @PreAuthorize("hasAnyRole('region', 'ministry')")
     @RequestMapping(method = RequestMethod.GET)

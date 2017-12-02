@@ -17,8 +17,12 @@ public class RegionService {
 
     private Logger logger = LoggerFactory.getLogger(RegionService.class);
 
+    private final RegionRepository regionRepository;
+
     @Autowired
-    private RegionRepository regionRepository;
+    public RegionService(RegionRepository regionRepository) {
+        this.regionRepository = regionRepository;
+    }
 
     public <T extends RegionCoreDto> List<T> getAllDto(Class<T> clazz) {
         return regionRepository.findAll().stream().map(t -> {

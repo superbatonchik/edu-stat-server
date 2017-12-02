@@ -35,10 +35,14 @@ public class MunicipalityFormDataController extends BaseController {
 
     Logger logger = LoggerFactory.getLogger(MunicipalityFormDataController.class);
 
+    private final FormDataService formDataService;
+    private final MunicipalityService municipalityService;
+
     @Autowired
-    private FormDataService formDataService;
-    @Autowired
-    private MunicipalityService municipalityService;
+    public MunicipalityFormDataController(FormDataService formDataService, MunicipalityService municipalityService) {
+        this.formDataService = formDataService;
+        this.municipalityService = municipalityService;
+    }
 
     @PreAuthorize("hasAnyRole('region', 'ministry', 'municipality')")
     @RequestMapping(method = RequestMethod.GET)

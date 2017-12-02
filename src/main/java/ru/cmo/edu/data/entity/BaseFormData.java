@@ -1,7 +1,5 @@
 package ru.cmo.edu.data.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.sql.Date;
 

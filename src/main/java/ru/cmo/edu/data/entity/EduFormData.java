@@ -1,7 +1,6 @@
 package ru.cmo.edu.data.entity;
 
 import javax.persistence.*;
-import java.sql.Date;
 
 /**
  * Created by to on 11.07.2017.

@@ -1,7 +1,6 @@
 package ru.cmo.edu.service;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.InvalidClaimException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;

@@ -21,8 +21,12 @@ import java.util.List;
 @Service
 public class JpaUserDetailsService implements UserDetailsService {
 
+    private final CredentialsRepository credentialsEntityRepository;
+
     @Autowired
-    CredentialsRepository credentialsEntityRepository;
+    public JpaUserDetailsService(CredentialsRepository credentialsEntityRepository) {
+        this.credentialsEntityRepository = credentialsEntityRepository;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {

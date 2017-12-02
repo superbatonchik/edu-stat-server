@@ -4,8 +4,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import ru.cmo.edu.data.entity.Edu;
-import ru.cmo.edu.data.entity.EduKind;
-import ru.cmo.edu.data.entity.Municipality;
 
 import java.util.List;
 

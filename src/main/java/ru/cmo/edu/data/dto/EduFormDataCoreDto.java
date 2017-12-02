@@ -1,6 +1,5 @@
 package ru.cmo.edu.data.dto;
 
-import ru.cmo.edu.data.entity.BaseFormData;
 import ru.cmo.edu.data.entity.EduFormData;
 
 /**

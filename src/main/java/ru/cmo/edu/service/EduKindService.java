@@ -18,8 +18,12 @@ public class EduKindService {
 
     private Logger logger = LoggerFactory.getLogger(EduKindService.class);
 
+    private final EduKindRepository eduKindRepository;
+
     @Autowired
-    private EduKindRepository eduKindRepository;
+    public EduKindService(EduKindRepository eduKindRepository) {
+        this.eduKindRepository = eduKindRepository;
+    }
 
     public <T extends EduKindCoreDto> List<T> getAllDto(Class<T> clazz) {
         return eduKindRepository.findAll().stream().map(t -> {

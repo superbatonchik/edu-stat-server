@@ -4,26 +4,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
-import org.springframework.hateoas.ResourceSupport;
-import org.springframework.hateoas.Resources;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import ru.cmo.edu.data.dto.EduCoreDto;
 import ru.cmo.edu.data.dto.EduFormDataCoreDto;
 import ru.cmo.edu.data.dto.EduKindCoreDto;
 import ru.cmo.edu.data.dto.MunicipalityCoreDto;
-import ru.cmo.edu.data.entity.Edu;
-import ru.cmo.edu.data.entity.EduFormData;
-import ru.cmo.edu.data.entity.EduKind;
-import ru.cmo.edu.data.entity.Municipality;
 import ru.cmo.edu.data.resource.EduKindResource;
 import ru.cmo.edu.data.resource.EduResource;
 import ru.cmo.edu.data.resource.MunicipalityResource;
@@ -50,14 +39,18 @@ public class EduFormDataController extends BaseController {
 
     Logger logger = LoggerFactory.getLogger(EduFormDataController.class);
 
+    private final FormDataService formDataService;
+    private final MunicipalityService municipalityService;
+    private final EduKindService eduKindService;
+    private final EduService eduService;
+
     @Autowired
-    private FormDataService formDataService;
-    @Autowired
-    private MunicipalityService municipalityService;
-    @Autowired
-    private EduKindService eduKindService;
-    @Autowired
-    private EduService eduService;
+    public EduFormDataController(FormDataService formDataService, MunicipalityService municipalityService, EduKindService eduKindService, EduService eduService) {
+        this.formDataService = formDataService;
+        this.municipalityService = municipalityService;
+        this.eduKindService = eduKindService;
+        this.eduService = eduService;
+    }
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity index(@RequestParam int id,
