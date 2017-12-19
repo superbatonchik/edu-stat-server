@@ -19,6 +19,7 @@ import ru.cmo.edu.rest.security.Role;
 import ru.cmo.edu.service.FormDataService;
 import ru.cmo.edu.service.RegionService;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,7 +45,7 @@ public class RegionFormDataController extends BaseController {
         this.regionService = regionService;
     }
 
-    @PreAuthorize("hasAnyRole('region', 'ministry')")
+    @PreAuthorize("hasAnyAuthority('region', 'ministry')")
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity index(@RequestParam int id,
                                 @RequestParam(required = false, defaultValue = "false") boolean isArchived) {
@@ -67,7 +68,7 @@ public class RegionFormDataController extends BaseController {
         return ResponseEntity.ok(navLink);
     }
 
-    @PreAuthorize("hasAnyRole('ministry')")
+    @PreAuthorize("hasAnyAuthority('region','ministry')")
     @RequestMapping(value = "/region", method = RequestMethod.GET)
     public ResponseEntity getRegionList() {
         List<RegionCoreDto> dtos = regionService.getAllDto(RegionCoreDto.class);
@@ -83,7 +84,7 @@ public class RegionFormDataController extends BaseController {
         return ResponseEntity.ok(resources);
     }
 
-    @PreAuthorize("hasAnyRole('region', 'ministry')")
+    @PreAuthorize("hasAnyAuthority('region', 'ministry')")
     @RequestMapping(value = "/form", method = RequestMethod.GET)
     public ResponseEntity getFormList(@RequestParam int regionId,
                                       @RequestParam boolean isArchived) {

@@ -75,7 +75,7 @@ public class EduFormDataController extends BaseController {
         return ResponseEntity.ok(navLink);
     }
 
-    @PreAuthorize("hasAnyRole('region', 'ministry')")
+    @PreAuthorize("hasAnyAuthority('region', 'ministry')")
     @RequestMapping(value = "/municipality", method = RequestMethod.GET)
     public ResponseEntity getMunicipalityList(@RequestParam int regionId) {
         List<MunicipalityCoreDto> dtos = municipalityService.getAllDto(MunicipalityCoreDto.class, regionId);
@@ -91,7 +91,7 @@ public class EduFormDataController extends BaseController {
         return ResponseEntity.ok(resources);
     }
 
-    @PreAuthorize("hasAnyRole('region', 'ministry', 'municipality')")
+    @PreAuthorize("hasAnyAuthority('region', 'ministry', 'municipality')")
     @RequestMapping(value = "/edukind", method = RequestMethod.GET)
     public ResponseEntity getEduKindList(@RequestParam int municipalityId) {
         List<EduKindCoreDto> dtos = eduKindService.getAllDto(EduKindCoreDto.class, municipalityId);
@@ -106,7 +106,7 @@ public class EduFormDataController extends BaseController {
         return ResponseEntity.ok(resources);
     }
 
-    @PreAuthorize("hasAnyRole('region', 'ministry', 'municipality')")
+    @PreAuthorize("hasAnyAuthority('region', 'ministry', 'municipality')")
     @RequestMapping(value = "/edu", method = RequestMethod.GET)
     public ResponseEntity getEduList(@RequestParam int municipalityId, @RequestParam int eduKindId) {
         List<EduCoreDto> dtos = eduService.getAllDto(EduCoreDto.class, municipalityId, eduKindId);
@@ -121,7 +121,7 @@ public class EduFormDataController extends BaseController {
         return ResponseEntity.ok(resources);
     }
 
-    @PreAuthorize("hasAnyRole('region', 'ministry', 'municipality', 'edu')")
+    @PreAuthorize("hasAnyAuthority('region', 'ministry', 'municipality', 'edu')")
     @RequestMapping(value = "/form", method = RequestMethod.GET)
     public ResponseEntity getFormList(@RequestParam int eduId, @RequestParam boolean isArchived) {
         List<EduFormDataCoreDto> dtos = formDataService.getEduFormDataDto(eduId, isArchived);

@@ -44,7 +44,7 @@ public class MunicipalityFormDataController extends BaseController {
         this.municipalityService = municipalityService;
     }
 
-    @PreAuthorize("hasAnyRole('region', 'ministry', 'municipality')")
+    @PreAuthorize("hasAnyAuthority('region', 'ministry', 'municipality')")
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity index(@RequestParam int id,
                                 @RequestParam(required = false, defaultValue = "false") boolean isArchived) {
@@ -67,7 +67,7 @@ public class MunicipalityFormDataController extends BaseController {
         return ResponseEntity.ok(navLink);
     }
 
-    @PreAuthorize("hasAnyRole('region', 'ministry')")
+    @PreAuthorize("hasAnyAuthority('region', 'ministry')")
     @RequestMapping(value = "/municipality", method = RequestMethod.GET)
     public ResponseEntity getMunicipalityList(@RequestParam int regionId) {
         List<MunicipalityCoreDto> dtos = municipalityService.getAllDto(MunicipalityCoreDto.class, regionId);
@@ -83,7 +83,7 @@ public class MunicipalityFormDataController extends BaseController {
         return ResponseEntity.ok(resources);
     }
 
-    @PreAuthorize("hasAnyRole('region', 'ministry', 'municipality')")
+    @PreAuthorize("hasAnyAuthority('region', 'ministry', 'municipality')")
     @RequestMapping(value = "/form", method = RequestMethod.GET)
     public ResponseEntity getFormList(@RequestParam int municipalityId,
                                       @RequestParam boolean isArchived) {

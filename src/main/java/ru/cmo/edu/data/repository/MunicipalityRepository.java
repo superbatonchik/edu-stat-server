@@ -18,6 +18,7 @@ public interface MunicipalityRepository extends CrudRepository<Municipality, Int
     List<Municipality> findAll();
 
     //poka ne nuzhno
-    @Query("select m from Municipality m order by m.name")
+    //если аргумент метода не используется в запросе, то jpa фейлит
+    @Query("select m from Municipality m where ?1 is not null order by m.name")
     List<Municipality> findAll(int regionId);
 }

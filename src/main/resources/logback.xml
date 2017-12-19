@@ -8,10 +8,26 @@
         </encoder>
     </appender>
 
-    <logger name="ru.cmo.edu" level="DEBUG"/>
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
 
-    <logger name="org.springframework" level="INFO" additivity="false">
+        <file>${catalina.base}/edu_log.log</file>
+
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>
+                %d{dd-MM-yyyy HH:mm:ss.SSS} [%thread] %-5level %logger{36}.%M - %msg%n
+            </Pattern>
+        </encoder>
+
+    </appender>
+
+    <logger name="ru.cmo.edu" level="DEBUG" additivity="false">
         <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE" />
+    </logger>
+
+    <logger name="org.springframework" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE" />
     </logger>
 
     <root level="error">
