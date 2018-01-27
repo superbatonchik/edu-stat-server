@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import ru.cmo.edu.exception.InvalidTokenException;
@@ -18,11 +19,11 @@ import java.util.Map;
 @Service
 public class JwtService {
 
-    public static final String CLAIM_KEY_USERNAME = "sub";
-    public static final String CLAIM_KEY_AUDIENCE = "audience";
-    public static final String CLAIM_KEY_CREATED = "created";
+    private static final String CLAIM_KEY_USERNAME = "sub";
+    private static final String CLAIM_KEY_AUDIENCE = "audience";
+    private static final String CLAIM_KEY_CREATED = "created";
 
-    public static final String AUDIENCE_MOBILE = "mobile";
+    private static final String AUDIENCE_MOBILE = "mobile";
 
     @Value("${jwt.secret}")
     private String tokenSecret;

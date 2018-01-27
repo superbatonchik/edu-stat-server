@@ -12,7 +12,7 @@ import java.util.List;
  */
 
 @Repository
-public interface EduRepository extends CrudRepository<Edu, Integer> {
+public interface EduRepository extends BaseRepository<Edu, Integer> {
 
     @Query(value = "select e from Edu e order by e.sysName, e.eduNumber asc")
     List<Edu> findAll();

@@ -7,7 +7,7 @@ import ru.cmo.edu.data.dto.EduKindCoreDto;
 /**
  * Created by to on 12.07.2017.
  */
-public class EduKindResource extends ResourceSupport {
+public class EduKindResource extends BaseResource {
     private EduKindCoreDto eduKindDto;
 
     public EduKindResource(EduKindCoreDto dto) {

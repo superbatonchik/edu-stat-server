@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
+import ru.cmo.edu.data.UserInfo;
 import ru.cmo.edu.exception.InvalidTokenException;
 import ru.cmo.edu.rest.security.UserRequest;
 import ru.cmo.edu.service.JwtService;
@@ -49,13 +50,15 @@ public class AuthController {
                 new UsernamePasswordAuthenticationToken(username, password)
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        UserDetails user = userDetailsService.loadUserByUsername(username);
+        UserInfo user = (UserInfo) userDetailsService.loadUserByUsername(username);
         String token = jwtService.generateToken(user);
         return ResponseEntity.ok(new HashMap<String, Object>() {
             {
                 put("token", token);
                 put("username", username);
                 put("expiration", jwtService.getExpiration(token));
+                put("role", authentication.getAuthorities().stream().findFirst().get().getAuthority());
+                put("name", user.getName());
             }
         });
     }

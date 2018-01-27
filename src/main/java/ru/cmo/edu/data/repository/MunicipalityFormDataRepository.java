@@ -14,13 +14,13 @@ import java.util.List;
 @Repository
 public interface MunicipalityFormDataRepository extends CrudRepository<MunicipalityFormData, Integer> {
 
-    @Query("select mf from MunicipalityFormData mf " +
-            "where mf.municipalityId = ?1 and YEAR(mf.sendDate) = YEAR(CURRENT_DATE) " +
+    @Query("select mf from MunicipalityFormData mf join mf.form f " +
+            "where mf.municipalityId = ?1 and f.formTypeId = ?2 and YEAR(mf.sendDate) = YEAR(CURRENT_DATE) " +
             "order by mf.sendDate desc")
-    List<MunicipalityFormData> findAll(int municipalityId);
+    List<MunicipalityFormData> findAll(int municipalityId, int formTypeId);
 
-    @Query("select mf from MunicipalityFormData mf " +
-            "where mf.municipalityId = ?1 and YEAR(mf.sendDate) < YEAR(CURRENT_DATE) " +
+    @Query("select mf from MunicipalityFormData mf join mf.form f " +
+            "where mf.municipalityId = ?1 and f.formTypeId = ?2 and YEAR(mf.sendDate) < YEAR(CURRENT_DATE) " +
             "order by mf.sendDate desc")
-    List<MunicipalityFormData> findAllArchived(int municipalityId);
+    List<MunicipalityFormData> findAllArchived(int municipalityId, int formTypeId);
 }

@@ -15,6 +15,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import ru.cmo.edu.data.repository.CredentialsRepository;
+import ru.cmo.edu.data.repository.EduRepository;
+import ru.cmo.edu.data.repository.MunicipalityRepository;
+import ru.cmo.edu.data.repository.RegionRepository;
 import ru.cmo.edu.rest.security.JwtAuthenticationTokenFilter;
 import ru.cmo.edu.service.JpaUserDetailsService;
 import ru.cmo.edu.service.JwtService;
@@ -30,17 +33,27 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private JwtService jwtService;
     private UserDetailsService userDetailsService;
     private CredentialsRepository credentialsRepository;
+    private final EduRepository eduRepository;
+    private final MunicipalityRepository municipalityRepository;
+    private final RegionRepository regionRepository;
 
     @Autowired
-    public WebSecurityConfig(JwtService jwtService, UserDetailsService userDetailsService, CredentialsRepository credentialsRepository) {
+    public WebSecurityConfig(JwtService jwtService, UserDetailsService userDetailsService,
+                             CredentialsRepository credentialsRepository,
+                             EduRepository eduRepository,
+                             MunicipalityRepository municipalityRepository,
+                             RegionRepository regionRepository) {
         this.jwtService = jwtService;
         this.userDetailsService = userDetailsService;
         this.credentialsRepository = credentialsRepository;
+        this.eduRepository = eduRepository;
+        this.municipalityRepository = municipalityRepository;
+        this.regionRepository = regionRepository;
     }
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return new JpaUserDetailsService(credentialsRepository);
+        return new JpaUserDetailsService(credentialsRepository, eduRepository, municipalityRepository, regionRepository);
     }
 
     @Autowired
@@ -78,9 +91,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .anyRequest().authenticated()
                 .antMatchers("/auth/**").permitAll()
-                .antMatchers("/").permitAll();
+                .antMatchers("/").permitAll()
+                .and()
+                .authorizeRequests()
+                .anyRequest().authenticated();
 
         // Custom JWT based security filter
         httpSecurity.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);

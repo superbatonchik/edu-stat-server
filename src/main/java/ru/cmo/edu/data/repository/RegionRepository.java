@@ -12,7 +12,7 @@ import java.util.List;
  */
 
 @Repository
-public interface RegionRepository extends CrudRepository<Region, Integer> {
+public interface RegionRepository extends BaseRepository<Region, Integer> {
     @Query("select r from Region r order by r.name")
     List<Region> findAll();
 }

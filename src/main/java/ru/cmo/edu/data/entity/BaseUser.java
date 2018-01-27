@@ -5,11 +5,10 @@ import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
-/**
- * Created by batonchik on 14.07.17.
- */
 @MappedSuperclass
 public class BaseUser {
+    public static final String MINISTRY_ALIAS = "Министерство";
+
     private int id;
     private String name;
 

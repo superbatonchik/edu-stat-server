@@ -12,7 +12,7 @@ import java.util.List;
  */
 
 @Repository
-public interface MunicipalityRepository extends CrudRepository<Municipality, Integer> {
+public interface MunicipalityRepository extends BaseRepository<Municipality, Integer> {
 
     @Query("select m from Municipality m order by m.name")
     List<Municipality> findAll();

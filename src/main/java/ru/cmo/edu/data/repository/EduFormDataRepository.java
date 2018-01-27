@@ -14,13 +14,13 @@ import java.util.List;
 @Repository
 public interface EduFormDataRepository extends CrudRepository<EduFormData, Integer> {
 
-    @Query("select ef from EduFormData ef " +
-            "where ef.eduId = ?1 and YEAR(ef.sendDate) = YEAR(CURRENT_DATE) " +
+    @Query("select ef from EduFormData ef join ef.form f " +
+            "where ef.eduId = ?1 and f.formTypeId = ?2 and YEAR(ef.sendDate) = YEAR(CURRENT_DATE) " +
             "order by ef.sendDate desc")
-    List<EduFormData> findAll(int eduId);
+    List<EduFormData> findAll(int eduId, int formTypeId);
 
-    @Query("select ef from EduFormData ef " +
-            "where ef.eduId = ?1 and YEAR(ef.sendDate) < YEAR(CURRENT_DATE) " +
+    @Query("select ef from EduFormData ef join ef.form f " +
+            "where ef.eduId = ?1 and f.formTypeId = ?2 and YEAR(ef.sendDate) < YEAR(CURRENT_DATE) " +
             "order by ef.sendDate desc")
-    List<EduFormData> findAllArchived(int eduId);
+    List<EduFormData> findAllArchived(int eduId, int formTypeId);
 }

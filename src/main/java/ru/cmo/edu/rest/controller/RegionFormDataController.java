@@ -2,7 +2,6 @@ package ru.cmo.edu.rest.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,12 +13,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.cmo.edu.data.dto.RegionCoreDto;
 import ru.cmo.edu.data.dto.RegionFormDataCoreDto;
+import ru.cmo.edu.data.entity.enumerable.FormTypeEnum;
+import ru.cmo.edu.data.resource.BaseResource;
 import ru.cmo.edu.data.resource.RegionResource;
 import ru.cmo.edu.rest.security.Role;
 import ru.cmo.edu.service.FormDataService;
 import ru.cmo.edu.service.RegionService;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,38 +47,82 @@ public class RegionFormDataController extends BaseController {
 
     @PreAuthorize("hasAnyAuthority('region', 'ministry')")
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity index(@RequestParam int id,
-                                @RequestParam(required = false, defaultValue = "false") boolean isArchived) {
+    public ResponseEntity index(@RequestParam int id) {
         Role role = getRole();
         if (role == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        Link navLink = linkTo(RegionFormDataController.class).withSelfRel();
+        List<BaseResource> resources = new ArrayList<>();
         switch(role) {
-            case ministry:
-                navLink = linkTo(methodOn(RegionFormDataController.class).getRegionList()).withSelfRel();
+            case ministry: {
+                BaseResource resource = new BaseResource();
+                resource.add(linkTo(methodOn(RegionFormDataController.class).getRegionList(FormTypeEnum.REGION, false)).withRel("current"));
+                resource.setLinkCaption(strings.get("title.region"));
+                resources.add(resource);
+
+                BaseResource resourceArchive = new BaseResource();
+                resourceArchive.add(linkTo(methodOn(RegionFormDataController.class).getRegionList(FormTypeEnum.REGION, true)).withRel("archive"));
+                resourceArchive.setLinkCaption(strings.get("title.region"));
+                resourceArchive.setLinkSubCaption(strings.get("title.archive"));
+                resources.add(resourceArchive);
+
+                BaseResource resourceAdditional = new BaseResource();
+                resourceAdditional.add(linkTo(methodOn(RegionFormDataController.class).getRegionList(FormTypeEnum.ADD_REGION, false)).withRel("additional"));
+                resourceAdditional.setLinkCaption(strings.get("title.region"));
+                resourceAdditional.setLinkSubCaption(strings.get("title.additional"));
+                resources.add(resourceAdditional);
+
+                BaseResource resourceAdditionalArchive = new BaseResource();
+                resourceAdditionalArchive.add(linkTo(methodOn(RegionFormDataController.class).getRegionList(FormTypeEnum.ADD_REGION, true)).withRel("additional-archive"));
+                resourceAdditionalArchive.setLinkCaption(strings.get("title.region"));
+                resourceAdditionalArchive.setLinkSubCaption(strings.get("title.archive") + " " + strings.get("title.additional"));
+                resources.add(resourceAdditionalArchive);
                 break;
-            case region:
-                navLink = linkTo(methodOn(RegionFormDataController.class).getFormList(id, isArchived)).withSelfRel();
+            }
+            case region: {
+                BaseResource resource = new BaseResource();
+                resource.add(linkTo(methodOn(RegionFormDataController.class).getFormList(id, FormTypeEnum.REGION, false)).withRel("current"));
+                resource.setLinkCaption(strings.get("title.region-form"));
+                resources.add(resource);
+
+                BaseResource resourceArchive = new BaseResource();
+                resourceArchive.add(linkTo(methodOn(RegionFormDataController.class).getFormList(id, FormTypeEnum.REGION, true)).withRel("archive"));
+                resourceArchive.setLinkCaption(strings.get("title.archive-region-form"));
+                resources.add(resourceArchive);
+
+                BaseResource resourceAdditional = new BaseResource();
+                resourceAdditional.add(linkTo(methodOn(RegionFormDataController.class).getFormList(id, FormTypeEnum.ADD_REGION, false)).withRel("additional"));
+                resourceAdditional.setLinkCaption(strings.get("title.add-region-form"));
+                resources.add(resourceAdditional);
+
+                BaseResource resourceAdditionalArchive = new BaseResource();
+                resourceAdditionalArchive.add(linkTo(methodOn(RegionFormDataController.class).getFormList(id, FormTypeEnum.ADD_REGION, true)).withRel("additional-archive"));
+                resourceAdditionalArchive.setLinkCaption(strings.get("title.archive-region-edu-form"));
+                resources.add(resourceAdditionalArchive);
                 break;
+            }
             case municipality:
             case edu:
-                throw new AccessDeniedException("Edu, municipality can not access municipality forms");
+                throw new AccessDeniedException("Edu, municipality can not access region forms");
         }
-        return ResponseEntity.ok(navLink);
+        return ResponseEntity.ok(resources);
     }
 
     @PreAuthorize("hasAnyAuthority('region','ministry')")
     @RequestMapping(value = "/region", method = RequestMethod.GET)
-    public ResponseEntity getRegionList() {
+    public ResponseEntity getRegionList(@RequestParam int formTypeId,
+                                        @RequestParam boolean isArchived) {
         List<RegionCoreDto> dtos = regionService.getAllDto(RegionCoreDto.class);
         List<RegionResource> resources = dtos.stream().map(t ->
         {
             RegionResource resource = new RegionResource(t);
-            List<Link> navigateToFormLinks = new ArrayList<>();
-            navigateToFormLinks.add(linkTo(methodOn(RegionFormDataController.class).getFormList(t.getId(), false)).withRel("actual"));
-            navigateToFormLinks.add(linkTo(methodOn(RegionFormDataController.class).getFormList(t.getId(), true)).withRel("archived"));
-            resource.add(navigateToFormLinks);
+            resource.add(linkTo(methodOn(RegionFormDataController.class).getFormList(t.getId(), formTypeId, isArchived)).withSelfRel());
+            String caption = isArchived ? strings.get("title.archive-region-form") : strings.get("title.region-form");
+            if (formTypeId == FormTypeEnum.ADD_REGION) {
+                caption = isArchived ? strings.get("title.archive-add-region-form") : strings.get("title.add-region-form");
+            }
+            resource.setLinkCaption(caption);
+            resource.setLinkSubCaption(t.getName());
             return resource;
         }).collect(Collectors.toList());
         return ResponseEntity.ok(resources);
@@ -87,8 +131,9 @@ public class RegionFormDataController extends BaseController {
     @PreAuthorize("hasAnyAuthority('region', 'ministry')")
     @RequestMapping(value = "/form", method = RequestMethod.GET)
     public ResponseEntity getFormList(@RequestParam int regionId,
+                                      @RequestParam int formTypeId,
                                       @RequestParam boolean isArchived) {
-        List<RegionFormDataCoreDto> dtos = formDataService.getRegionFormDataDto(regionId, isArchived);
+        List<RegionFormDataCoreDto> dtos = formDataService.getRegionFormDataDto(regionId, formTypeId, isArchived);
         return ResponseEntity.ok(dtos);
     }
 }

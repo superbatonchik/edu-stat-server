@@ -7,7 +7,7 @@ import ru.cmo.edu.data.dto.RegionCoreDto;
 /**
  * Created by to on 12.07.2017.
  */
-public class RegionResource extends ResourceSupport {
+public class RegionResource extends BaseResource {
     private RegionCoreDto regionCoreDto;
 
     public RegionResource(RegionCoreDto dto) {

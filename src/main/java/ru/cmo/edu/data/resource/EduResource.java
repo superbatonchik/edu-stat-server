@@ -7,7 +7,7 @@ import ru.cmo.edu.data.dto.EduCoreDto;
 /**
  * Created by to on 12.07.2017.
  */
-public class EduResource extends ResourceSupport {
+public class EduResource extends BaseResource {
     private EduCoreDto eduDto;
 
     public EduResource(EduCoreDto dto) {

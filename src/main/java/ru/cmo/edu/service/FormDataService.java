@@ -30,34 +30,34 @@ public class FormDataService {
         this.regionFormDataRepository = regionFormDataRepository;
     }
 
-    public List<EduFormDataCoreDto> getEduFormDataDto(int eduId, boolean isArchived) {
+    public List<EduFormDataCoreDto> getEduFormDataDto(int eduId, int formTypeId, boolean isArchived) {
         List<EduFormData> eduFormDatas;
         if (isArchived) {
-             eduFormDatas = eduFormDataRepository.findAllArchived(eduId);
+             eduFormDatas = eduFormDataRepository.findAllArchived(eduId, formTypeId);
         } else {
-            eduFormDatas = eduFormDataRepository.findAll(eduId);
+            eduFormDatas = eduFormDataRepository.findAll(eduId, formTypeId);
         }
         List<EduFormDataCoreDto> dtos = eduFormDatas.stream().map(EduFormDataCoreDto::new).collect(Collectors.toList());
         return dtos;
     }
 
-    public List<MunicipalityFormDataCoreDto> getMunicipalityFormDataDto(int municipalityId, boolean isArchived) {
+    public List<MunicipalityFormDataCoreDto> getMunicipalityFormDataDto(int municipalityId, int formTypeId, boolean isArchived) {
         List<MunicipalityFormData> municipalityFormDatas;
         if (isArchived) {
-            municipalityFormDatas = municipalityFormDataRepository.findAllArchived(municipalityId);
+            municipalityFormDatas = municipalityFormDataRepository.findAllArchived(municipalityId, formTypeId);
         } else {
-            municipalityFormDatas = municipalityFormDataRepository.findAll(municipalityId);
+            municipalityFormDatas = municipalityFormDataRepository.findAll(municipalityId, formTypeId);
         }
         List<MunicipalityFormDataCoreDto> dtos = municipalityFormDatas.stream().map(MunicipalityFormDataCoreDto::new).collect(Collectors.toList());
         return dtos;
     }
 
-    public List<RegionFormDataCoreDto> getRegionFormDataDto(int regionId, boolean isArchived) {
+    public List<RegionFormDataCoreDto> getRegionFormDataDto(int regionId, int formTypeId, boolean isArchived) {
         List<RegionFormData> regionFormDatas;
         if (isArchived) {
-            regionFormDatas = regionFormDataRepository.findAllArchived(regionId);
+            regionFormDatas = regionFormDataRepository.findAllArchived(regionId, formTypeId);
         } else {
-            regionFormDatas = regionFormDataRepository.findAll(regionId);
+            regionFormDatas = regionFormDataRepository.findAll(regionId, formTypeId);
         }
         List<RegionFormDataCoreDto> dtos = regionFormDatas.stream().map(RegionFormDataCoreDto::new).collect(Collectors.toList());
         return dtos;

@@ -7,7 +7,7 @@ import ru.cmo.edu.data.dto.MunicipalityCoreDto;
 /**
  * Created by to on 12.07.2017.
  */
-public class MunicipalityResource extends ResourceSupport {
+public class MunicipalityResource extends BaseResource {
     private MunicipalityCoreDto municipalityDto;
 
     public MunicipalityResource(MunicipalityCoreDto dto) {

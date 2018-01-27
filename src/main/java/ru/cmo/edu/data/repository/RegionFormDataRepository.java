@@ -14,13 +14,13 @@ import java.util.List;
 @Repository
 public interface RegionFormDataRepository extends CrudRepository<RegionFormData, Integer> {
 
-    @Query("select rf from RegionFormData rf " +
-            "where rf.regionId = ?1 and YEAR(rf.sendDate) = YEAR(CURRENT_DATE) " +
+    @Query("select rf from RegionFormData rf join rf.form f " +
+            "where rf.regionId = ?1 and f.formTypeId = ?2 and YEAR(rf.sendDate) = YEAR(CURRENT_DATE) " +
             "order by rf.sendDate desc")
-    List<RegionFormData> findAll(int regionId);
+    List<RegionFormData> findAll(int regionId, int formTypeId);
 
-    @Query("select rf from RegionFormData rf " +
-            "where rf.regionId = ?1 and YEAR(rf.sendDate) < YEAR(CURRENT_DATE) " +
+    @Query("select rf from RegionFormData rf join rf.form f " +
+            "where rf.regionId = ?1 and f.formTypeId = ?2 and YEAR(rf.sendDate) < YEAR(CURRENT_DATE) " +
             "order by rf.sendDate desc")
-    List<RegionFormData> findAllArchived(int regionId);
+    List<RegionFormData> findAllArchived(int regionId, int formTypeId);
 }
