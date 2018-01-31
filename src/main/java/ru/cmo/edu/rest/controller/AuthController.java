@@ -58,7 +58,9 @@ public class AuthController {
                 put("username", username);
                 put("expiration", jwtService.getExpiration(token));
                 put("role", authentication.getAuthorities().stream().findFirst().get().getAuthority());
+                put("accessRights", user.getAccessRights());
                 put("name", user.getName());
+                put("id", user.getId());
             }
         });
     }

@@ -83,7 +83,7 @@ public class EduFormDataController extends BaseController {
                 BaseResource resourceAdditionalArchive = new BaseResource();
                 resourceAdditionalArchive.add(linkTo(methodOn(EduFormDataController.class).getMunicipalityList(id, FormTypeEnum.ADD_EDU, true)).withRel("additional-archive"));
                 resourceAdditionalArchive.setLinkCaption(strings.get("title.municipality"));
-                resourceAdditionalArchive.setLinkSubCaption(strings.get("archive") + " " + strings.get("title.additional"));
+                resourceAdditionalArchive.setLinkSubCaption(strings.get("title.archive") + " " + strings.get("title.additional"));
                 resources.add(resourceAdditionalArchive);
 
                 break;

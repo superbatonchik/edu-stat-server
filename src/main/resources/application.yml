@@ -1,7 +1,7 @@
 spring:
   datasource:
-#    url: jdbc:postgresql://localhost:5432/edu_forms_test
-    url: jdbc:postgresql://5.139.217.156:5432/edu_forms_test
+    url: jdbc:postgresql://localhost:5432/edu_forms_test
+#    url: jdbc:postgresql://5.139.217.156:5432/edu_forms_test
     driver-class-name: org.postgresql.Driver
     username: user
     password: qwer1234

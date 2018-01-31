@@ -17,8 +17,10 @@ import ru.cmo.edu.data.repository.CredentialsRepository;
 import ru.cmo.edu.data.repository.EduRepository;
 import ru.cmo.edu.data.repository.MunicipalityRepository;
 import ru.cmo.edu.data.repository.RegionRepository;
+import ru.cmo.edu.rest.security.AccessRights;
 import ru.cmo.edu.rest.security.Role;
 
+import java.util.EnumSet;
 import java.util.List;
 
 /**
@@ -51,27 +53,52 @@ public class JpaUserDetailsService implements UserDetailsService {
         } else {
             CredentialsTypeEnum credentialsType = CredentialsTypeEnum.get(credentials.getLoginType());
             List<GrantedAuthority> authorities = null;
+            int accessRights = 0;
             BaseUser user = new BaseUser();
             switch (credentialsType) {
                 case REGION:
                     authorities = AuthorityUtils.createAuthorityList(String.valueOf(Role.region));
                     user = regionRepository.findById(credentials.getRefId());
+                    accessRights = AccessRights.EduForms |
+                            AccessRights.MunitForms |
+                            AccessRights.RegionForms |
+                            AccessRights.Dictionaries |
+                            AccessRights.Queries |
+                            AccessRights.CreateQueries |
+                            AccessRights.Statistics |
+                            AccessRights.UploadForm;
                     break;
                 case MINISTRY:
                     authorities = AuthorityUtils.createAuthorityList(String.valueOf(Role.ministry));
                     user = new BaseUser();
                     user.setName(StringUtils.isEmpty(credentials.getAlias()) ? BaseUser.MINISTRY_ALIAS : credentials.getAlias());
+                    accessRights = AccessRights.EduForms |
+                            AccessRights.MunitForms |
+                            AccessRights.RegionForms |
+                            AccessRights.Queries |
+                            AccessRights.Statistics;
                     break;
                 case MUNICIPALITY:
                     authorities = AuthorityUtils.createAuthorityList(String.valueOf(Role.municipality));
                     user = municipalityRepository.findById(credentials.getRefId());
+                    accessRights = AccessRights.EduForms |
+                            AccessRights.MunitForms |
+                            AccessRights.Queries |
+                            AccessRights.Statistics |
+                            AccessRights.UploadForm |
+                            AccessRights.Passport |
+                            AccessRights.SendMessage;
                     break;
                 case EDU:
                     authorities = AuthorityUtils.createAuthorityList(String.valueOf(Role.edu));
                     user = eduRepository.findById(credentials.getRefId());
+                    accessRights = AccessRights.EduForms |
+                            AccessRights.UploadForm |
+                            AccessRights.Passport |
+                            AccessRights.SendMessage;
                     break;
             }
-            return new UserInfo(credentials.getLogin(), credentials.getPasswd(), user.getName(), authorities);
+            return new UserInfo(credentials.getLogin(), credentials.getPasswd(), user.getName(), user.getId(), authorities, accessRights);
         }
     }
 }

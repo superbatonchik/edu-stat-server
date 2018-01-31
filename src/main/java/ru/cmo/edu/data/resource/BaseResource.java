@@ -5,6 +5,7 @@ import org.springframework.hateoas.ResourceSupport;
 public class BaseResource extends ResourceSupport {
     private String linkCaption;
     private String linkSubCaption;
+    private String additionalText;
 
     public String getLinkCaption() {
         return linkCaption;
@@ -20,5 +21,13 @@ public class BaseResource extends ResourceSupport {
 
     public void setLinkSubCaption(String linkSubCaption) {
         this.linkSubCaption = linkSubCaption;
+    }
+
+    public String getAdditionalText() {
+        return additionalText;
+    }
+
+    public void setAdditionalText(String additionalText) {
+        this.additionalText = additionalText;
     }
 }
