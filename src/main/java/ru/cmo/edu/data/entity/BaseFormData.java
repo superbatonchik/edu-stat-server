@@ -1,7 +1,7 @@
 package ru.cmo.edu.data.entity;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 /**
  * Created by to on 11.07.2017.
@@ -11,7 +11,7 @@ public class BaseFormData {
     private int id;
     private int documentFormatId;
     private int formId;
-    private Date sendDate;
+    private LocalDateTime sendDate;
     private int status;
     private int fileId;
     private DocumentFormat documentFormat;
@@ -50,11 +50,11 @@ public class BaseFormData {
 
     @Basic
     @Column(name = "send_date")
-    public Date getSendDate() {
+    public LocalDateTime getSendDate() {
         return sendDate;
     }
 
-    public void setSendDate(Date sendDate) {
+    public void setSendDate(LocalDateTime sendDate) {
         this.sendDate = sendDate;
     }
 

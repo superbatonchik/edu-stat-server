@@ -13,16 +13,16 @@ import ru.cmo.edu.data.dto.EduFormDataCoreDto;
 import ru.cmo.edu.data.dto.EduKindCoreDto;
 import ru.cmo.edu.data.dto.MunicipalityCoreDto;
 import ru.cmo.edu.data.entity.enumerable.FormTypeEnum;
-import ru.cmo.edu.data.resource.BaseResource;
-import ru.cmo.edu.data.resource.EduKindResource;
-import ru.cmo.edu.data.resource.EduResource;
-import ru.cmo.edu.data.resource.MunicipalityResource;
+import ru.cmo.edu.data.resource.*;
 import ru.cmo.edu.rest.security.Role;
 import ru.cmo.edu.service.EduKindService;
 import ru.cmo.edu.service.EduService;
 import ru.cmo.edu.service.FormDataService;
 import ru.cmo.edu.service.MunicipalityService;
 
+import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -192,6 +192,14 @@ public class EduFormDataController extends BaseController {
     @RequestMapping(value = "/form", method = RequestMethod.GET)
     public ResponseEntity getFormList(@RequestParam int eduId, @RequestParam int formTypeId, @RequestParam boolean isArchived) {
         List<EduFormDataCoreDto> dtos = formDataService.getEduFormDataDto(eduId, formTypeId, isArchived);
-        return ResponseEntity.ok(dtos);
+        EduCoreDto eduDto = eduService.getDto(eduId, EduCoreDto.class);
+        List<FormDataResource> resources = dtos.stream().map(t -> {
+            FormDataResource resource = new FormDataResource(t);
+            resource.add(linkTo(EduFormDataController.class).slash("link_to_file?id=" + t.getFileId()).withRel("file"));
+            resource.setLinkCaption(eduDto.getName());
+            resource.setLinkSubCaption(MessageFormat.format("{0}, {1}", t.getForm().getName(), DateTimeFormatter.ofPattern("d MMMM yyyy HH:mm").format(t.getSendDate())));
+            return resource;
+        }).collect(Collectors.toList());
+        return ResponseEntity.ok(resources);
     }
 }

@@ -15,11 +15,15 @@ import ru.cmo.edu.data.dto.MunicipalityCoreDto;
 import ru.cmo.edu.data.dto.MunicipalityFormDataCoreDto;
 import ru.cmo.edu.data.entity.enumerable.FormTypeEnum;
 import ru.cmo.edu.data.resource.BaseResource;
+import ru.cmo.edu.data.resource.FormDataResource;
 import ru.cmo.edu.data.resource.MunicipalityResource;
 import ru.cmo.edu.rest.security.Role;
 import ru.cmo.edu.service.FormDataService;
 import ru.cmo.edu.service.MunicipalityService;
 
+import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -99,7 +103,7 @@ public class MunicipalityFormDataController extends BaseController {
 
                 BaseResource resourceAdditionalArchive = new BaseResource();
                 resourceAdditionalArchive.add(linkTo(methodOn(EduFormDataController.class).getFormList(id, FormTypeEnum.ADD_MUNICIPALITY, true)).withRel("additional-archive"));
-                resourceAdditionalArchive.setLinkCaption(strings.get("title.archive-municipality-edu-form"));
+                resourceAdditionalArchive.setLinkCaption(strings.get("title.archive-add-municipality-form"));
                 resources.add(resourceAdditionalArchive);
                 break;
             }
@@ -136,6 +140,14 @@ public class MunicipalityFormDataController extends BaseController {
                                       @RequestParam int formTypeId,
                                       @RequestParam boolean isArchived) {
         List<MunicipalityFormDataCoreDto> dtos = formDataService.getMunicipalityFormDataDto(municipalityId, formTypeId, isArchived);
-        return ResponseEntity.ok(dtos);
+        MunicipalityCoreDto municipalityDto = municipalityService.getDto(municipalityId, MunicipalityCoreDto.class);
+        List<FormDataResource> resources = dtos.stream().map(t -> {
+            FormDataResource resource = new FormDataResource(t);
+            resource.add(linkTo(MunicipalityFormDataController.class).slash("link_to_file?id=" + t.getFileId()).withRel("file"));
+            resource.setLinkCaption(municipalityDto.getName());
+            resource.setLinkSubCaption(MessageFormat.format("{0}, {1}", t.getForm().getName(), DateTimeFormatter.ofPattern("d MMMM yyyy HH:mm").format(t.getSendDate())));
+            return resource;
+        }).collect(Collectors.toList());
+        return ResponseEntity.ok(resources);
     }
 }

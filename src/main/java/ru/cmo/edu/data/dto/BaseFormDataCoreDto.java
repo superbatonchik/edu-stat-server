@@ -2,14 +2,14 @@ package ru.cmo.edu.data.dto;
 
 import ru.cmo.edu.data.entity.BaseFormData;
 
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 /**
  * Created by to on 12.07.2017.
  */
 public class BaseFormDataCoreDto {
     private int id;
-    private Date sendDate;
+    private LocalDateTime sendDate;
     private int status;
     private int fileId;
     private String documentFormat;
@@ -35,11 +35,11 @@ public class BaseFormDataCoreDto {
         this.id = id;
     }
 
-    public Date getSendDate() {
+    public LocalDateTime getSendDate() {
         return sendDate;
     }
 
-    public void setSendDate(Date sendDate) {
+    public void setSendDate(LocalDateTime sendDate) {
         this.sendDate = sendDate;
     }
 

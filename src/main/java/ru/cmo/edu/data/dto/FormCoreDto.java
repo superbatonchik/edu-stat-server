@@ -2,7 +2,7 @@ package ru.cmo.edu.data.dto;
 
 import ru.cmo.edu.data.entity.Form;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * Created by to on 12.07.2017.
@@ -10,7 +10,7 @@ import java.util.Date;
 public class FormCoreDto {
     private int id;
     private String name;
-    private Date submissionDate;
+    private LocalDateTime submissionDate;
     private int formTypeId;
     private boolean isCheckRequired;
     private Boolean isNotificationHidden;
@@ -40,11 +40,11 @@ public class FormCoreDto {
         this.name = name;
     }
 
-    public Date getSubmissionDate() {
+    public LocalDateTime getSubmissionDate() {
         return submissionDate;
     }
 
-    public void setSubmissionDate(Date submissionDate) {
+    public void setSubmissionDate(LocalDateTime submissionDate) {
         this.submissionDate = submissionDate;
     }
 

@@ -46,4 +46,14 @@ public class MunicipalityService {
             }
         }).collect(Collectors.toList());
     }
+
+    public <T extends MunicipalityCoreDto> T getDto(int id, Class<T> clazz) {
+        Municipality municipality = municipalityRepository.findById(id);
+        try {
+            return clazz.getDeclaredConstructor(Municipality.class).newInstance(municipality);
+        } catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
+            logger.error(e.getMessage(), e);
+            return (T)new MunicipalityCoreDto(municipality);
+        }
+    }
 }

@@ -1,7 +1,7 @@
 package ru.cmo.edu.data.entity;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * Created by to on 11.07.2017.
@@ -13,7 +13,7 @@ public class Message {
     private String subject;
     private String body;
     private int fromEduId;
-    private Date sendDate;
+    private LocalDateTime sendDate;
     private boolean isViewed;
     private Edu edu;
 
@@ -59,11 +59,11 @@ public class Message {
 
     @Basic
     @Column(name = "send_date")
-    public Date getSendDate() {
+    public LocalDateTime getSendDate() {
         return sendDate;
     }
 
-    public void setSendDate(Date sendDate) {
+    public void setSendDate(LocalDateTime sendDate) {
         this.sendDate = sendDate;
     }
 

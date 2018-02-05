@@ -1,7 +1,7 @@
 package ru.cmo.edu.data.entity;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 /**
@@ -12,7 +12,7 @@ import java.util.Set;
 public class Form {
     private int id;
     private String name;
-    private Date submissionDate;
+    private LocalDateTime submissionDate;
     private String checkFileMd5;
     private int formTypeId;
     private Integer templateFileId;
@@ -50,11 +50,11 @@ public class Form {
 
     @Basic
     @Column(name = "submission_date")
-    public Date getSubmissionDate() {
+    public LocalDateTime getSubmissionDate() {
         return submissionDate;
     }
 
-    public void setSubmissionDate(Date submissionDate) {
+    public void setSubmissionDate(LocalDateTime submissionDate) {
         this.submissionDate = submissionDate;
     }
 

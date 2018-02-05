@@ -1,7 +1,7 @@
 package ru.cmo.edu.data.entity;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Set;
 
@@ -18,9 +18,9 @@ public class Edu extends BaseUser {
     private Integer statusId;
     private String code;
     private String okpoCode;
-    private Date licenseDate;
+    private LocalDateTime licenseDate;
     private String licenseFrom;
-    private Date accreditationDate;
+    private LocalDateTime accreditationDate;
     private String accreditationFrom;
     private Integer ownershipTypeId;
     private Integer eduTypeId;
@@ -34,8 +34,8 @@ public class Edu extends BaseUser {
     private boolean managementAgencyHasAuthority;
     private String accreditationNum;
     private String licenseNum;
-    private Date accreditationEndDate;
-    private Date licenseEndDate;
+    private LocalDateTime accreditationEndDate;
+    private LocalDateTime licenseEndDate;
     private String kpp;
     private String ogrn;
     private String inn;
@@ -127,11 +127,11 @@ public class Edu extends BaseUser {
 
     @Basic
     @Column(name = "license_date")
-    public Date getLicenseDate() {
+    public LocalDateTime getLicenseDate() {
         return licenseDate;
     }
 
-    public void setLicenseDate(Date licenseDate) {
+    public void setLicenseDate(LocalDateTime licenseDate) {
         this.licenseDate = licenseDate;
     }
 
@@ -147,11 +147,11 @@ public class Edu extends BaseUser {
 
     @Basic
     @Column(name = "accreditation_date")
-    public Date getAccreditationDate() {
+    public LocalDateTime getAccreditationDate() {
         return accreditationDate;
     }
 
-    public void setAccreditationDate(Date accreditationDate) {
+    public void setAccreditationDate(LocalDateTime accreditationDate) {
         this.accreditationDate = accreditationDate;
     }
 
@@ -287,21 +287,21 @@ public class Edu extends BaseUser {
 
     @Basic
     @Column(name = "accreditation_end_date")
-    public Date getAccreditationEndDate() {
+    public LocalDateTime getAccreditationEndDate() {
         return accreditationEndDate;
     }
 
-    public void setAccreditationEndDate(Date accreditationEndDate) {
+    public void setAccreditationEndDate(LocalDateTime accreditationEndDate) {
         this.accreditationEndDate = accreditationEndDate;
     }
 
     @Basic
     @Column(name = "license_end_date")
-    public Date getLicenseEndDate() {
+    public LocalDateTime getLicenseEndDate() {
         return licenseEndDate;
     }
 
-    public void setLicenseEndDate(Date licenseEndDate) {
+    public void setLicenseEndDate(LocalDateTime licenseEndDate) {
         this.licenseEndDate = licenseEndDate;
     }
 

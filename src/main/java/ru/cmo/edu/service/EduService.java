@@ -57,4 +57,14 @@ public class EduService {
             }
         }).collect(Collectors.toList());
     }
+
+    public <T extends EduCoreDto> T getDto(int id, Class<T> clazz) {
+        Edu edu = eduRepository.findById(id);
+        try {
+            return clazz.getDeclaredConstructor(Edu.class).newInstance(edu);
+        } catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
+            logger.error(e.getMessage(), e);
+            return (T)new EduCoreDto(edu);
+        }
+    }
 }

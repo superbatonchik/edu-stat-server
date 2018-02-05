@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.cmo.edu.data.dto.RegionCoreDto;
 import ru.cmo.edu.data.entity.Municipality;
+import ru.cmo.edu.data.entity.Region;
 import ru.cmo.edu.data.repository.RegionRepository;
 
 import java.lang.reflect.InvocationTargetException;
@@ -27,11 +28,21 @@ public class RegionService {
     public <T extends RegionCoreDto> List<T> getAllDto(Class<T> clazz) {
         return regionRepository.findAll().stream().map(t -> {
             try {
-                return clazz.getDeclaredConstructor(Municipality.class).newInstance(t);
+                return clazz.getDeclaredConstructor(Region.class).newInstance(t);
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                 logger.error(e.getMessage(), e);
                 return (T)new RegionCoreDto(t);
             }
         }).collect(Collectors.toList());
+    }
+
+    public <T extends RegionCoreDto> T getDto(int id, Class<T> clazz) {
+        Region region = regionRepository.findById(id);
+        try {
+            return clazz.getDeclaredConstructor(Region.class).newInstance(region);
+        } catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
+            logger.error(e.getMessage(), e);
+            return (T)new RegionCoreDto(region);
+        }
     }
 }

@@ -3,6 +3,9 @@ package ru.cmo.edu.rest.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.hateoas.Link;
+import org.springframework.hateoas.LinkBuilder;
+import org.springframework.hateoas.core.LinkBuilderSupport;
+import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -15,11 +18,15 @@ import ru.cmo.edu.data.dto.RegionCoreDto;
 import ru.cmo.edu.data.dto.RegionFormDataCoreDto;
 import ru.cmo.edu.data.entity.enumerable.FormTypeEnum;
 import ru.cmo.edu.data.resource.BaseResource;
+import ru.cmo.edu.data.resource.FormDataResource;
 import ru.cmo.edu.data.resource.RegionResource;
 import ru.cmo.edu.rest.security.Role;
 import ru.cmo.edu.service.FormDataService;
 import ru.cmo.edu.service.RegionService;
 
+import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -97,7 +104,7 @@ public class RegionFormDataController extends BaseController {
 
                 BaseResource resourceAdditionalArchive = new BaseResource();
                 resourceAdditionalArchive.add(linkTo(methodOn(RegionFormDataController.class).getFormList(id, FormTypeEnum.ADD_REGION, true)).withRel("additional-archive"));
-                resourceAdditionalArchive.setLinkCaption(strings.get("title.archive-region-edu-form"));
+                resourceAdditionalArchive.setLinkCaption(strings.get("title.archive-add-region-form"));
                 resources.add(resourceAdditionalArchive);
                 break;
             }
@@ -134,6 +141,14 @@ public class RegionFormDataController extends BaseController {
                                       @RequestParam int formTypeId,
                                       @RequestParam boolean isArchived) {
         List<RegionFormDataCoreDto> dtos = formDataService.getRegionFormDataDto(regionId, formTypeId, isArchived);
-        return ResponseEntity.ok(dtos);
+        RegionCoreDto regionDto = regionService.getDto(regionId, RegionCoreDto.class);
+        List<FormDataResource> resources = dtos.stream().map(t -> {
+            FormDataResource resource = new FormDataResource(t);
+            resource.add(linkTo(RegionFormDataController.class).slash("link_to_file?id=" + t.getFileId()).withRel("file"));
+            resource.setLinkCaption(regionDto.getName());
+            resource.setLinkSubCaption(MessageFormat.format("{0}, {1}", t.getForm().getName(), DateTimeFormatter.ofPattern("d MMMM yyyy HH:mm").format(t.getSendDate())));
+            return resource;
+        }).collect(Collectors.toList());
+        return ResponseEntity.ok(resources);
     }
 }
