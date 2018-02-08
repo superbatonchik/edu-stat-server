@@ -9,9 +9,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import ru.cmo.edu.data.dto.EduCoreDto;
-import ru.cmo.edu.data.dto.EduFormDataCoreDto;
 import ru.cmo.edu.data.dto.EduKindCoreDto;
+import ru.cmo.edu.data.dto.FormDataCoreDto;
 import ru.cmo.edu.data.dto.MunicipalityCoreDto;
+import ru.cmo.edu.data.entity.FormStatus;
 import ru.cmo.edu.data.entity.enumerable.FormTypeEnum;
 import ru.cmo.edu.data.resource.*;
 import ru.cmo.edu.rest.security.Role;
@@ -21,10 +22,10 @@ import ru.cmo.edu.service.FormDataService;
 import ru.cmo.edu.service.MunicipalityService;
 
 import java.text.MessageFormat;
-import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
@@ -145,12 +146,14 @@ public class EduFormDataController extends BaseController {
     @RequestMapping(value = "/municipality", method = RequestMethod.GET)
     public ResponseEntity getMunicipalityList(@RequestParam int regionId, @RequestParam int formTypeId, @RequestParam boolean isArchived) {
         List<MunicipalityCoreDto> dtos = municipalityService.getAllDto(MunicipalityCoreDto.class, regionId);
+        Map<Integer, Integer> statuses = formDataService.getMunicipalityStatusForEdu(regionId, isArchived);
         List<MunicipalityResource> resources = dtos.stream().map(t ->
         {
             MunicipalityResource resource = new MunicipalityResource(t);
             resource.add(linkTo(methodOn(EduFormDataController.class).getEduKindList(t.getId(), formTypeId, isArchived)).withSelfRel());
             resource.setLinkCaption(strings.get("title.edu-kind"));
             resource.setLinkSubCaption(t.getName());
+            resource.setStatus(statuses.get(t.getId()));
             return resource;
         }).collect(Collectors.toList());
         return ResponseEntity.ok(resources);
@@ -160,11 +163,13 @@ public class EduFormDataController extends BaseController {
     @RequestMapping(value = "/edukind", method = RequestMethod.GET)
     public ResponseEntity getEduKindList(@RequestParam int municipalityId, @RequestParam int formTypeId, @RequestParam boolean isArchived) {
         List<EduKindCoreDto> dtos = eduKindService.getAllDto(EduKindCoreDto.class, municipalityId);
+        Map<Integer, Integer> statuses = formDataService.getEduKindStatusForEdu(0, municipalityId, isArchived);
         List<EduKindResource> resources = dtos.stream().map(t -> {
             EduKindResource resource = new EduKindResource(t);
             resource.add(linkTo(methodOn(EduFormDataController.class).getEduList(municipalityId, t.getId(), formTypeId, isArchived)).withSelfRel());
             resource.setLinkCaption(strings.get("title.edu"));
             resource.setLinkSubCaption(t.getName());
+            resource.setStatus(statuses.get(t.getId()));
             return resource;
         }).collect(Collectors.toList());
         return ResponseEntity.ok(resources);
@@ -174,15 +179,17 @@ public class EduFormDataController extends BaseController {
     @RequestMapping(value = "/edu", method = RequestMethod.GET)
     public ResponseEntity getEduList(@RequestParam int municipalityId, @RequestParam int eduKindId, @RequestParam int formTypeId, @RequestParam boolean isArchived) {
         List<EduCoreDto> dtos = eduService.getAllDto(EduCoreDto.class, municipalityId, eduKindId);
+        Map<Integer, Integer> statuses = formDataService.getEduStatus(0, municipalityId, eduKindId, isArchived);
         List<EduResource> resources = dtos.stream().map(t -> {
             EduResource resource = new EduResource(t);
-            resource.add(linkTo(methodOn(EduFormDataController.class).getFormList(t.getId(), formTypeId, isArchived)).withSelfRel());
+            resource.add(linkTo(methodOn(EduFormDataController.class).getFormList(t.getId(), formTypeId, isArchived)).withRel("form-data"));
             String caption = isArchived ? strings.get("title.archive-edu-form") : strings.get("title.edu-form");
             if (formTypeId == FormTypeEnum.ADD_EDU) {
                 caption = isArchived ? strings.get("title.archive-add-edu-form") : strings.get("title.add-edu-form");
             }
             resource.setLinkCaption(caption);
             resource.setLinkSubCaption(t.getSysName());
+            resource.setStatus(statuses.get(t.getId()));
             return resource;
         }).collect(Collectors.toList());
         return ResponseEntity.ok(resources);
@@ -191,7 +198,7 @@ public class EduFormDataController extends BaseController {
     @PreAuthorize("hasAnyAuthority('region', 'ministry', 'municipality', 'edu')")
     @RequestMapping(value = "/form", method = RequestMethod.GET)
     public ResponseEntity getFormList(@RequestParam int eduId, @RequestParam int formTypeId, @RequestParam boolean isArchived) {
-        List<EduFormDataCoreDto> dtos = formDataService.getEduFormDataDto(eduId, formTypeId, isArchived);
+        List<FormDataCoreDto> dtos = formDataService.getEduFormDataDto(eduId, formTypeId, isArchived);
         EduCoreDto eduDto = eduService.getDto(eduId, EduCoreDto.class);
         List<FormDataResource> resources = dtos.stream().map(t -> {
             FormDataResource resource = new FormDataResource(t);

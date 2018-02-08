@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import ru.cmo.edu.data.dto.FormDataCoreDto;
 import ru.cmo.edu.data.dto.MunicipalityCoreDto;
-import ru.cmo.edu.data.dto.MunicipalityFormDataCoreDto;
 import ru.cmo.edu.data.entity.enumerable.FormTypeEnum;
 import ru.cmo.edu.data.resource.BaseResource;
 import ru.cmo.edu.data.resource.FormDataResource;
@@ -22,10 +22,10 @@ import ru.cmo.edu.service.FormDataService;
 import ru.cmo.edu.service.MunicipalityService;
 
 import java.text.MessageFormat;
-import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
@@ -119,16 +119,18 @@ public class MunicipalityFormDataController extends BaseController {
                                               @RequestParam int formTypeId,
                                               @RequestParam boolean isArchived) {
         List<MunicipalityCoreDto> dtos = municipalityService.getAllDto(MunicipalityCoreDto.class, regionId);
+        Map<Integer, Integer> statuses = formDataService.getMunicipalityStatus(regionId, isArchived);
         List<MunicipalityResource> resources = dtos.stream().map(t ->
         {
             MunicipalityResource resource = new MunicipalityResource(t);
-            resource.add(linkTo(methodOn(MunicipalityFormDataController.class).getFormList(t.getId(), formTypeId, isArchived)).withSelfRel());
+            resource.add(linkTo(methodOn(MunicipalityFormDataController.class).getFormList(t.getId(), formTypeId, isArchived)).withRel("form-data"));
             String caption = isArchived ? strings.get("title.archive-municipality-form") : strings.get("title.municipality-form");
             if (formTypeId == FormTypeEnum.ADD_MUNICIPALITY) {
                 caption = isArchived ? strings.get("title.archive-add-municipality-form") : strings.get("title.add-municipality-form");
             }
             resource.setLinkCaption(caption);
             resource.setLinkSubCaption(t.getName());
+            resource.setStatus(statuses.get(t.getId()));
             return resource;
         }).collect(Collectors.toList());
         return ResponseEntity.ok(resources);
@@ -139,7 +141,7 @@ public class MunicipalityFormDataController extends BaseController {
     public ResponseEntity getFormList(@RequestParam int municipalityId,
                                       @RequestParam int formTypeId,
                                       @RequestParam boolean isArchived) {
-        List<MunicipalityFormDataCoreDto> dtos = formDataService.getMunicipalityFormDataDto(municipalityId, formTypeId, isArchived);
+        List<FormDataCoreDto> dtos = formDataService.getMunicipalityFormDataDto(municipalityId, formTypeId, isArchived);
         MunicipalityCoreDto municipalityDto = municipalityService.getDto(municipalityId, MunicipalityCoreDto.class);
         List<FormDataResource> resources = dtos.stream().map(t -> {
             FormDataResource resource = new FormDataResource(t);

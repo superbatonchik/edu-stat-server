@@ -6,6 +6,7 @@ public class BaseResource extends ResourceSupport {
     private String linkCaption;
     private String linkSubCaption;
     private String additionalText;
+    private int status;
 
     public String getLinkCaption() {
         return linkCaption;
@@ -29,5 +30,13 @@ public class BaseResource extends ResourceSupport {
 
     public void setAdditionalText(String additionalText) {
         this.additionalText = additionalText;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 }
