@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
  * Created by to on 12.07.2017.
  */
 public class FormCoreDto {
+    private long templateFileId;
+    private long checkFileId;
     private int id;
     private String name;
     private LocalDateTime submissionDate;
@@ -22,6 +24,8 @@ public class FormCoreDto {
         this.formTypeId = f.getFormTypeId();
         this.isCheckRequired = f.isCheckRequired();
         this.isNotificationHidden = f.getNotificationHidden();
+        this.templateFileId = f.getTemplateFileId();
+        this.checkFileId = f.getCheckFileId();
     }
 
     public int getId() {
@@ -70,5 +74,21 @@ public class FormCoreDto {
 
     public void setNotificationHidden(Boolean notificationHidden) {
         isNotificationHidden = notificationHidden;
+    }
+
+    public long getTemplateFileId() {
+        return templateFileId;
+    }
+
+    public void setTemplateFileId(long templateFileId) {
+        this.templateFileId = templateFileId;
+    }
+
+    public long getCheckFileId() {
+        return checkFileId;
+    }
+
+    public void setCheckFileId(long checkFileId) {
+        this.checkFileId = checkFileId;
     }
 }

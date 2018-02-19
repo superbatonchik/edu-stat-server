@@ -52,6 +52,7 @@ public class Edu extends BaseUser {
     private Collection<Message> messages;
     private Set<ActivityType> activityTypes;
     private Set<Form> blockedForms;
+    private Set<Form> hiddenForms;
     private Set<ManagementAgency> managementAgencies;
     private Set<ManagementAgencyActivity> managementAgencyActivities;
 
@@ -550,6 +551,16 @@ public class Edu extends BaseUser {
 
     public void setBlockedForms(Set<Form> blockedForms) {
         this.blockedForms = blockedForms;
+    }
+
+    @ManyToMany
+    @JoinTable(name = "mm_edu__hidden_form", catalog = "edu_forms_test", schema = "public", joinColumns = @JoinColumn(name = "edu_id", referencedColumnName = "id", nullable = false), inverseJoinColumns = @JoinColumn(name = "form_id", referencedColumnName = "id", nullable = false))
+    public Set<Form> getHiddenForms() {
+        return hiddenForms;
+    }
+
+    public void setHiddenForms(Set<Form> hiddenForms) {
+        this.hiddenForms = hiddenForms;
     }
 
     @ManyToMany

@@ -15,3 +15,6 @@ alter table municipality rename column municipality_id to id;
 alter table ownership_type rename column ownership_type_id to id;
 alter table region rename column region_id to id;
 alter table settlement_type rename column settlement_type_id to id;
+
+ALTER TABLE public.file ADD COLUMN file_path VARCHAR(255) DEFAULT 'empty' NOT NULL,
+  ADD COLUMN file_name VARCHAR(255) DEFAULT 'empty' NOT NULL

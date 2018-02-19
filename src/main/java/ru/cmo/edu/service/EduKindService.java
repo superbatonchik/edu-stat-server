@@ -26,18 +26,17 @@ public class EduKindService {
     }
 
     public <T extends EduKindCoreDto> List<T> getAllDto(Class<T> clazz) {
-        return eduKindRepository.findAll().stream().map(t -> {
-            try {
-                return clazz.getDeclaredConstructor(EduKind.class).newInstance(t);
-            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                logger.error(e.getMessage(), e);
-                return (T) new EduKindCoreDto(t);
-            }
-        }).collect(Collectors.toList());
+        List<EduKind> list =  eduKindRepository.findAll();
+        return toDto(clazz, list);
     }
 
     public <T extends EduKindCoreDto> List<T> getAllDto(Class<T> clazz, int municipalityId) {
-        return eduKindRepository.findAll(municipalityId).stream().map(t -> {
+        List<EduKind> list = eduKindRepository.findAll(municipalityId);
+        return toDto(clazz, list);
+    }
+
+    private <T extends EduKindCoreDto> List<T> toDto(Class<T> clazz, List<EduKind> list) {
+        List<T> dtos = list.stream().map(t -> {
             try {
                 return clazz.getDeclaredConstructor(EduKind.class).newInstance(t);
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
@@ -45,5 +44,6 @@ public class EduKindService {
                 return (T) new EduKindCoreDto(t);
             }
         }).collect(Collectors.toList());
+        return dtos;
     }
 }

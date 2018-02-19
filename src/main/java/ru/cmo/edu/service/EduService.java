@@ -26,45 +26,38 @@ public class EduService {
     }
 
     public <T extends EduCoreDto> List<T> getAllDto(Class<T> clazz) {
-        return eduRepository.findAll().stream().map(t -> {
-            try {
-                return clazz.getDeclaredConstructor(Edu.class).newInstance(t);
-            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                logger.error(e.getMessage(), e);
-                return (T) new EduCoreDto(t);
-            }
-        }).collect(Collectors.toList());
+        List<Edu> list = eduRepository.findAll();
+        return toDto(clazz, list);
     }
 
     public <T extends EduCoreDto> List<T> getAllDto(Class<T> clazz, int municipalityId) {
-        return eduRepository.findAll(municipalityId).stream().map(t -> {
-            try {
-                return clazz.getDeclaredConstructor(Edu.class).newInstance(t);
-            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                logger.error(e.getMessage(), e);
-                return (T) new EduCoreDto(t);
-            }
-        }).collect(Collectors.toList());
+        List<Edu> list = eduRepository.findAll(municipalityId);
+        return toDto(clazz, list);
     }
 
     public <T extends EduCoreDto> List<T> getAllDto(Class<T> clazz, int municipalityId, int eduKindId) {
-        return eduRepository.findAll(municipalityId, eduKindId).stream().map(t -> {
-            try {
-                return clazz.getDeclaredConstructor(Edu.class).newInstance(t);
-            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                logger.error(e.getMessage(), e);
-                return (T) new EduCoreDto(t);
-            }
-        }).collect(Collectors.toList());
+        List<Edu> list = eduRepository.findAll(municipalityId, eduKindId);
+        return toDto(clazz, list);
     }
 
     public <T extends EduCoreDto> T getDto(int id, Class<T> clazz) {
         Edu edu = eduRepository.findById(id);
+        return toDto(clazz, edu);
+    }
+
+    private <T extends EduCoreDto> List<T> toDto(Class<T> clazz, List<Edu> list) {
+        List<T> dtos = list.stream().map(t -> {
+            return toDto(clazz, t);
+        }).collect(Collectors.toList());
+        return dtos;
+    }
+
+    private <T extends EduCoreDto> T toDto(Class<T> clazz, Edu edu) {
         try {
             return clazz.getDeclaredConstructor(Edu.class).newInstance(edu);
-        } catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             logger.error(e.getMessage(), e);
-            return (T)new EduCoreDto(edu);
+            return (T) new EduCoreDto(edu);
         }
     }
 }

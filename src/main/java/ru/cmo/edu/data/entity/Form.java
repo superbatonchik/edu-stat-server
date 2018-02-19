@@ -1,5 +1,8 @@
 package ru.cmo.edu.data.entity;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -18,14 +21,13 @@ public class Form {
     private Integer templateFileId;
     private Integer checkFileId;
     private boolean isCheckRequired;
-    private Integer checkDataFileId;
     private Boolean isNotificationHidden;
-    private FormType formTypeByFormTypeId;
-    private File template;
+    private FormType formType;
+    private File templateFile;
     private File checkFile;
-    private File checkDataFile;
     private Set<Query> queries;
     private Set<Edu> blockedEdus;
+    private Set<Edu> hiddenEdus;
     private Set<Municipality> blockedMunicipalities;
 
     @Id
@@ -109,16 +111,6 @@ public class Form {
     }
 
     @Basic
-    @Column(name = "check_data_file_id", insertable = false, updatable = false)
-    public Integer getCheckDataFileId() {
-        return checkDataFileId;
-    }
-
-    public void setCheckDataFileId(Integer checkDataFileId) {
-        this.checkDataFileId = checkDataFileId;
-    }
-
-    @Basic
     @Column(name = "is_notification_hidden")
     public Boolean getNotificationHidden() {
         return isNotificationHidden;
@@ -145,8 +137,6 @@ public class Form {
         if (templateFileId != null ? !templateFileId.equals(form.templateFileId) : form.templateFileId != null)
             return false;
         if (checkFileId != null ? !checkFileId.equals(form.checkFileId) : form.checkFileId != null) return false;
-        if (checkDataFileId != null ? !checkDataFileId.equals(form.checkDataFileId) : form.checkDataFileId != null)
-            return false;
         if (isNotificationHidden != null ? !isNotificationHidden.equals(form.isNotificationHidden) : form.isNotificationHidden != null)
             return false;
 
@@ -163,32 +153,31 @@ public class Form {
         result = 31 * result + (templateFileId != null ? templateFileId.hashCode() : 0);
         result = 31 * result + (checkFileId != null ? checkFileId.hashCode() : 0);
         result = 31 * result + (isCheckRequired ? 1 : 0);
-        result = 31 * result + (checkDataFileId != null ? checkDataFileId.hashCode() : 0);
         result = 31 * result + (isNotificationHidden != null ? isNotificationHidden.hashCode() : 0);
         return result;
     }
 
     @ManyToOne
     @JoinColumn(name = "form_type_id", referencedColumnName = "id", nullable = false)
-    public FormType getFormTypeByFormTypeId() {
-        return formTypeByFormTypeId;
+    public FormType getFormType() {
+        return formType;
     }
 
-    public void setFormTypeByFormTypeId(FormType formTypeByFormTypeId) {
-        this.formTypeByFormTypeId = formTypeByFormTypeId;
+    public void setFormType(FormType formType) {
+        this.formType = formType;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "template_file_id", referencedColumnName = "id")
-    public File getTemplate() {
-        return template;
+    public File getTemplateFile() {
+        return templateFile;
     }
 
-    public void setTemplate(File template) {
-        this.template = template;
+    public void setTemplateFile(File templateFile) {
+        this.templateFile = templateFile;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "check_file_id", referencedColumnName = "id")
     public File getCheckFile() {
         return checkFile;
@@ -196,16 +185,6 @@ public class Form {
 
     public void setCheckFile(File checkFile) {
         this.checkFile = checkFile;
-    }
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "check_data_file_id", referencedColumnName = "id")
-    public File getCheckDataFile() {
-        return checkDataFile;
-    }
-
-    public void setCheckDataFile(File checkDataFile) {
-        this.checkDataFile = checkDataFile;
     }
 
     @OneToMany(mappedBy = "form")
@@ -224,6 +203,15 @@ public class Form {
 
     public void setBlockedEdus(Set<Edu> blockedEdus) {
         this.blockedEdus = blockedEdus;
+    }
+
+    @ManyToMany(mappedBy = "hiddenForms")
+    public Set<Edu> getHiddenEdus() {
+        return hiddenEdus;
+    }
+
+    public void setHiddenEdus(Set<Edu> hiddenEdus) {
+        this.hiddenEdus = hiddenEdus;
     }
 
     @ManyToMany(mappedBy = "blockedForms")

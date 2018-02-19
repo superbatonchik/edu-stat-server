@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import ru.cmo.edu.data.UserInfo;
 import ru.cmo.edu.exception.InvalidTokenException;
 
 import java.util.Date;
@@ -22,6 +23,7 @@ public class JwtService {
     private static final String CLAIM_KEY_USERNAME = "sub";
     private static final String CLAIM_KEY_AUDIENCE = "audience";
     private static final String CLAIM_KEY_CREATED = "created";
+    private static final String CLAIM_KEY_USER_ID = "user_id";
 
     private static final String AUDIENCE_MOBILE = "mobile";
 
@@ -49,6 +51,11 @@ public class JwtService {
         return claims.getSubject();
     }
 
+    public int getUserId(String token) throws InvalidTokenException {
+        Claims claims = getClaimsFromToken(token);
+        return (int)claims.get(CLAIM_KEY_USER_ID);
+    }
+
     public Date getCreated(String token) throws InvalidTokenException {
         Claims claims = getClaimsFromToken(token);
         return new Date((Long)claims.get(CLAIM_KEY_CREATED));
@@ -67,10 +74,12 @@ public class JwtService {
                 .compact();
     }
 
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(UserInfo user) {
+
         Map<String, Object> claims = new HashMap<String, Object>() {
             {
-                put(CLAIM_KEY_USERNAME, userDetails.getUsername());
+                put(CLAIM_KEY_USERNAME, user.getUsername());
+                put(CLAIM_KEY_USER_ID, user.getId());
                 put(CLAIM_KEY_AUDIENCE, AUDIENCE_MOBILE);
                 put(CLAIM_KEY_CREATED, new Date());
             }
