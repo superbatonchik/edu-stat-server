@@ -16,6 +16,8 @@ public class FormCoreDto {
     private int formTypeId;
     private boolean isCheckRequired;
     private Boolean isNotificationHidden;
+    private long remainingTimeSeconds;
+    private boolean isBlocked;
 
     public FormCoreDto(Form f) {
         this.id = f.getId();
@@ -90,5 +92,21 @@ public class FormCoreDto {
 
     public void setCheckFileId(long checkFileId) {
         this.checkFileId = checkFileId;
+    }
+
+    public long getRemainingTimeSeconds() {
+        return remainingTimeSeconds;
+    }
+
+    public void setRemainingTimeSeconds(long remainingTimeSeconds) {
+        this.remainingTimeSeconds = remainingTimeSeconds;
+    }
+
+    public boolean isBlocked() {
+        return isBlocked;
+    }
+
+    public void setBlocked(boolean blocked) {
+        isBlocked = blocked;
     }
 }

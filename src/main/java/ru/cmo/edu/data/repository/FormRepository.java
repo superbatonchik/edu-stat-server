@@ -31,4 +31,14 @@ public interface FormRepository extends CrudRepository<Form, Integer> {
             "AND e.edu_kind_id = ek.id " +
             "AND f.id NOT IN (SELECT form_id FROM mm_edu__hidden_form WHERE edu_id = e.id)", nativeQuery = true)
     List<Form> findAllByEdu(int eduId);
+
+    @Query(value = "SELECT bf.form_id FROM " +
+            "  mm_edu__blocked_form bf " +
+            "WHERE bf.edu_id = ?1", nativeQuery = true)
+    List<Object[]> findBlockedIdsByEdu(int id);
+
+    @Query(value = "SELECT bf.form_id FROM " +
+            "  mm_municipality__blocked_form bf " +
+            "WHERE bf.municipality_id = ?1", nativeQuery = true)
+    List<Object[]> findBlockedIdsByMunicipality(int id);
 }
