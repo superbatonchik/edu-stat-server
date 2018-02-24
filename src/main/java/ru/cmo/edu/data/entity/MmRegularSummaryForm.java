@@ -11,7 +11,7 @@ import java.util.Arrays;
 public class MmRegularSummaryForm {
     private int regularFormId;
     private int summaryFormId;
-    private byte[] fileData;
+    private int fileId;
     private int id;
     private Form regularForm;
     private Form summaryForm;
@@ -37,13 +37,13 @@ public class MmRegularSummaryForm {
     }
 
     @Basic
-    @Column(name = "file_data")
-    public byte[] getFileData() {
-        return fileData;
+    @Column(name = "file_id")
+    public int getFileId() {
+        return fileId;
     }
 
-    public void setFileData(byte[] fileData) {
-        this.fileData = fileData;
+    public void setFileId(int fileId) {
+        this.fileId = fileId;
     }
 
     @Id
@@ -66,7 +66,7 @@ public class MmRegularSummaryForm {
         if (regularFormId != that.regularFormId) return false;
         if (summaryFormId != that.summaryFormId) return false;
         if (id != that.id) return false;
-        if (!Arrays.equals(fileData, that.fileData)) return false;
+        if (fileId != that.fileId) return false;
 
         return true;
     }
@@ -75,7 +75,7 @@ public class MmRegularSummaryForm {
     public int hashCode() {
         int result = regularFormId;
         result = 31 * result + summaryFormId;
-        result = 31 * result + Arrays.hashCode(fileData);
+        result = 31 * result + fileId;
         result = 31 * result + id;
         return result;
     }

@@ -22,5 +22,10 @@ public interface EduRepository extends BaseRepository<Edu, Integer> {
 
     @Query(value = "select e from Edu e where e.municipalityId = ?1 and e.eduKindId = ?2 order by e.sysName, e.eduNumber asc")
     List<Edu> findAll(int municipalityId, int eduKindId);
+
+    @Query(value = "select e from Edu e " +
+            "join fetch e.eduFormDatas ef " +
+            "where ef.formId = ?1 and YEAR(ef.sendDate) = ?2")
+    List<Edu> findAllByForm(int formId, int year);
 }
 

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.cmo.edu.data.dto.FormCoreDto;
 import ru.cmo.edu.data.entity.Form;
+import ru.cmo.edu.data.entity.MmRegularSummaryForm;
 import ru.cmo.edu.data.repository.FormRepository;
 
 import java.lang.reflect.InvocationTargetException;
@@ -48,5 +49,9 @@ public class FormService {
             }
         }).collect(Collectors.toList());
         return dtos;
+    }
+
+    public MmRegularSummaryForm getSummaryForm(int summaryFormId) {
+        return formRepository.findSummaryByFormId(summaryFormId);
     }
 }

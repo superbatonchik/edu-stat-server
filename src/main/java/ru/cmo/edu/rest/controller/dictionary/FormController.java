@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.cmo.edu.data.dto.FormCoreDto;
+import ru.cmo.edu.data.entity.MmRegularSummaryForm;
 import ru.cmo.edu.data.entity.enumerable.FormTypeEnum;
 import ru.cmo.edu.data.repository.FormRepository;
 import ru.cmo.edu.exception.InvalidTokenException;
@@ -79,5 +80,15 @@ public class FormController extends BaseController {
             dto.setRemainingTimeSeconds(remaining);
         }
         return ResponseEntity.ok(dtos);
+    }
+
+    @PreAuthorize("hasAnyAuthority('region','ministry','municipality','edu')")
+    @RequestMapping(value = "/summary", method = RequestMethod.GET)
+    public ResponseEntity getSummaryForm(@RequestParam int summaryFormId) {
+        MmRegularSummaryForm summaryForm = formService.getSummaryForm(summaryFormId);
+        if (summaryForm == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(summaryForm);
     }
 }

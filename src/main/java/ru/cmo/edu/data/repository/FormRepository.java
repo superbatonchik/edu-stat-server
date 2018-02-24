@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import ru.cmo.edu.data.entity.Form;
+import ru.cmo.edu.data.entity.MmRegularSummaryForm;
 
 import java.util.List;
 import java.util.Set;
@@ -41,4 +42,10 @@ public interface FormRepository extends CrudRepository<Form, Integer> {
             "  mm_municipality__blocked_form bf " +
             "WHERE bf.municipality_id = ?1", nativeQuery = true)
     List<Object[]> findBlockedIdsByMunicipality(int id);
+
+    @Query("select s from MmRegularSummaryForm s " +
+            "left join fetch s.regularForm rf " +
+            "left join fetch s.summaryForm sf " +
+            "where s.summary_form_id = ?1")
+    MmRegularSummaryForm findSummaryByFormId(int summaryFormId);
 }

@@ -23,8 +23,6 @@ public class Form {
     private boolean isCheckRequired;
     private Boolean isNotificationHidden;
     private FormType formType;
-    private File templateFile;
-    private File checkFile;
     private Set<Query> queries;
     private Set<Edu> blockedEdus;
     private Set<Edu> hiddenEdus;
@@ -165,26 +163,6 @@ public class Form {
 
     public void setFormType(FormType formType) {
         this.formType = formType;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "template_file_id", referencedColumnName = "id")
-    public File getTemplateFile() {
-        return templateFile;
-    }
-
-    public void setTemplateFile(File templateFile) {
-        this.templateFile = templateFile;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "check_file_id", referencedColumnName = "id")
-    public File getCheckFile() {
-        return checkFile;
-    }
-
-    public void setCheckFile(File checkFile) {
-        this.checkFile = checkFile;
     }
 
     @OneToMany(mappedBy = "form")

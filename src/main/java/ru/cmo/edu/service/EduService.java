@@ -40,10 +40,16 @@ public class EduService {
         return toDto(clazz, list);
     }
 
+    public <T extends EduCoreDto> List<T> getAllByFormDto(Class<T> clazz, int formId, int year) {
+        List<Edu> list = eduRepository.findAllByForm(formId, year);
+        return toDto(clazz, list);
+    }
+
     public <T extends EduCoreDto> T getDto(int id, Class<T> clazz) {
         Edu edu = eduRepository.findById(id);
         return toDto(clazz, edu);
     }
+
 
     private <T extends EduCoreDto> List<T> toDto(Class<T> clazz, List<Edu> list) {
         List<T> dtos = list.stream().map(t -> {
