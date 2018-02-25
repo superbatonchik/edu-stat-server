@@ -40,8 +40,13 @@ public class EduService {
         return toDto(clazz, list);
     }
 
-    public <T extends EduCoreDto> List<T> getAllByFormDto(Class<T> clazz, int formId, int year) {
-        List<Edu> list = eduRepository.findAllByForm(formId, year);
+    public <T extends EduCoreDto> List<T> getAllByFormDto(Class<T> clazz, Integer municipalityId, int formId, int year) {
+        List<Edu> list = null;
+        if (municipalityId == null) {
+            list = eduRepository.findAllByForm(formId, year);
+        } else {
+            list = eduRepository.findAllByForm(municipalityId, formId, year);
+        }
         return toDto(clazz, list);
     }
 

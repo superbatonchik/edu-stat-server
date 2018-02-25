@@ -21,4 +21,10 @@ public interface MunicipalityRepository extends BaseRepository<Municipality, Int
     //если аргумент метода не используется в запросе, то jpa фейлит
     @Query("select m from Municipality m where ?1 is not null order by m.name")
     List<Municipality> findAll(int regionId);
+
+    @Query("select m from Municipality m " +
+            "left join m.municipalityFormDatas fd on fd.formId = ?1 and YEAR(fd.sendDate) = ?2" +
+            "order by m.name")
+    List<Municipality> findAllByForm(int formId, int year);
+
 }

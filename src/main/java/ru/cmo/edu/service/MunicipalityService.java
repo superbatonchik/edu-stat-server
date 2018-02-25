@@ -26,34 +26,38 @@ public class MunicipalityService {
     }
 
     public <T extends MunicipalityCoreDto> List<T> getAllDto(Class<T> clazz) {
-        return municipalityRepository.findAll().stream().map(t -> {
-            try {
-                return clazz.getDeclaredConstructor(Municipality.class).newInstance(t);
-            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                logger.error(e.getMessage(), e);
-                return (T)(new MunicipalityCoreDto(t));
-            }
-        }).collect(Collectors.toList());
+        List<Municipality> list = municipalityRepository.findAll();
+        return toDto(clazz, list);
     }
 
     public <T extends MunicipalityCoreDto> List<T> getAllDto(Class<T> clazz, int regionId) {
-        return municipalityRepository.findAll(regionId).stream().map(t -> {
-            try {
-                return clazz.getDeclaredConstructor(Municipality.class).newInstance(t);
-            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                logger.error(e.getMessage(), e);
-                return (T)(new MunicipalityCoreDto(t));
-            }
-        }).collect(Collectors.toList());
+        List<Municipality> list = municipalityRepository.findAll(regionId);
+        return toDto(clazz, list);
     }
 
     public <T extends MunicipalityCoreDto> T getDto(int id, Class<T> clazz) {
         Municipality municipality = municipalityRepository.findById(id);
+        return toDto(clazz, municipality);
+    }
+
+    public <T extends MunicipalityCoreDto> List<T> getAllByFormDto(Class<T> clazz, int formId, int year) {
+        List<Municipality> list = municipalityRepository.findAllByForm(formId, year);
+        return toDto(clazz, list);
+    }
+
+    private <T extends MunicipalityCoreDto> List<T> toDto(Class<T> clazz, List<Municipality> list) {
+        List<T> dtos = list.stream().map(t -> {
+            return toDto(clazz, t);
+        }).collect(Collectors.toList());
+        return dtos;
+    }
+
+    private <T extends MunicipalityCoreDto> T toDto(Class<T> clazz, Municipality municipality) {
         try {
             return clazz.getDeclaredConstructor(Municipality.class).newInstance(municipality);
-        } catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             logger.error(e.getMessage(), e);
-            return (T)new MunicipalityCoreDto(municipality);
+            return (T) new MunicipalityCoreDto(municipality);
         }
     }
 }

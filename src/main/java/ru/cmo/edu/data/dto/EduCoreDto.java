@@ -1,6 +1,7 @@
 package ru.cmo.edu.data.dto;
 
 import ru.cmo.edu.data.entity.Edu;
+import ru.cmo.edu.data.entity.Municipality;
 
 /**
  * Created by to on 12.07.2017.
@@ -13,6 +14,7 @@ public class EduCoreDto {
     private Integer eduKindId;
     private Integer eduNumber;
     private String sysName;
+    private MunicipalityCoreDto municipality;
 
     public EduCoreDto(Edu e) {
         this.id = e.getId();
@@ -22,6 +24,7 @@ public class EduCoreDto {
         this.eduKindId = e.getEduKindId();
         this.eduNumber = e.getEduNumber();
         this.sysName = e.getSysName();
+        this.municipality = new MunicipalityCoreDto(e.getMunicipality());
     }
 
     public int getId() {
@@ -78,5 +81,13 @@ public class EduCoreDto {
 
     public void setSysName(String sysName) {
         this.sysName = sysName;
+    }
+
+    public MunicipalityCoreDto getMunicipality() {
+        return municipality;
+    }
+
+    public void setMunicipality(MunicipalityCoreDto municipality) {
+        this.municipality = municipality;
     }
 }

@@ -14,18 +14,31 @@ import java.util.List;
 @Repository
 public interface EduRepository extends BaseRepository<Edu, Integer> {
 
-    @Query(value = "select e from Edu e order by e.sysName, e.eduNumber asc")
+    @Query("select e from Edu e " +
+            "join fetch e.municipality " +
+            "order by e.sysName, e.eduNumber asc")
     List<Edu> findAll();
 
-    @Query(value = "select e from Edu e where e.municipalityId = ?1 order by e.name, e.eduNumber asc")
+    @Query("select e from Edu e " +
+            "join fetch e.municipality " +
+            "where e.municipalityId = ?1 " +
+            "order by e.name, e.eduNumber asc")
     List<Edu> findAll(int municipalityId);
 
-    @Query(value = "select e from Edu e where e.municipalityId = ?1 and e.eduKindId = ?2 order by e.sysName, e.eduNumber asc")
+    @Query("select e from Edu e " +
+            "join fetch e.municipality " +
+            "where e.municipalityId = ?1 and e.eduKindId = ?2 order by e.sysName, e.eduNumber asc")
     List<Edu> findAll(int municipalityId, int eduKindId);
 
-    @Query(value = "select e from Edu e " +
-            "join fetch e.eduFormDatas ef " +
-            "where ef.formId = ?1 and YEAR(ef.sendDate) = ?2")
+    @Query("select e from Edu e " +
+            "join fetch e.municipality " +
+            "left join fetch e.eduFormDatas ef on ef.formId = ?2 and YEAR(ef.sendDate) = ?3 " +
+            "where e.municipalityId = ?1")
+    List<Edu> findAllByForm(int municipalityId, int formId, int year);
+
+    @Query("select e from Edu e " +
+            "join fetch e.municipality " +
+            "left join fetch e.eduFormDatas ef on ef.formId = ?1 and YEAR(ef.sendDate) = ?2")
     List<Edu> findAllByForm(int formId, int year);
 }
 

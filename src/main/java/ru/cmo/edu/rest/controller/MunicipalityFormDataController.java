@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.cmo.edu.data.dto.FormDataCoreDto;
 import ru.cmo.edu.data.dto.MunicipalityCoreDto;
+import ru.cmo.edu.data.dto.MunicipalityWithFormDataDto;
 import ru.cmo.edu.data.entity.enumerable.FormTypeEnum;
 import ru.cmo.edu.data.resource.BaseResource;
 import ru.cmo.edu.data.resource.FormDataResource;
@@ -151,5 +152,14 @@ public class MunicipalityFormDataController extends BaseController {
             return resource;
         }).collect(Collectors.toList());
         return ResponseEntity.ok(resources);
+    }
+
+    @PreAuthorize("hasAnyAuthority('region', 'ministry')")
+    @RequestMapping(value = "/haveform", method = RequestMethod.GET)
+    public ResponseEntity getMunicipalityListHaveFormData(@RequestParam(required = false) Integer regionId,
+                                                 @RequestParam Integer formId,
+                                                 @RequestParam Integer year) {
+        List<MunicipalityWithFormDataDto> dtos = municipalityService.getAllByFormDto(MunicipalityWithFormDataDto.class, formId, year);
+        return ResponseEntity.ok(dtos);
     }
 }

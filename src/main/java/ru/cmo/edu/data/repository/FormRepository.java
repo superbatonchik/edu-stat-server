@@ -45,7 +45,7 @@ public interface FormRepository extends CrudRepository<Form, Integer> {
 
     @Query("select s from MmRegularSummaryForm s " +
             "left join fetch s.regularForm rf " +
-            "left join fetch s.summaryForm sf " +
-            "where s.summary_form_id = ?1")
+            "join fetch s.summaryForm sf " +
+            "where s.summaryFormId = ?1")
     MmRegularSummaryForm findSummaryByFormId(int summaryFormId);
 }

@@ -207,9 +207,11 @@ public class EduFormDataController extends BaseController {
     }
 
     @PreAuthorize("hasAnyAuthority('region', 'ministry', 'municipality')")
-    @RequestMapping(value = "/edu/form", method = RequestMethod.GET)
-    public ResponseEntity getEduListHaveFormData(@RequestParam int formId, @RequestParam int year) {
-        List<EduWithFormDataDto> dtos = eduService.getAllByFormDto(EduWithFormDataDto.class, formId, year);
+    @RequestMapping(value = "/haveform", method = RequestMethod.GET)
+    public ResponseEntity getEduListHaveFormData(@RequestParam(required = false) Integer municipalityId,
+                                                 @RequestParam Integer formId,
+                                                 @RequestParam Integer year) {
+        List<EduWithFormDataDto> dtos = eduService.getAllByFormDto(EduWithFormDataDto.class, municipalityId, formId, year);
         return ResponseEntity.ok(dtos);
     }
 }
