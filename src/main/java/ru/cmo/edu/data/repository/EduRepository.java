@@ -32,13 +32,15 @@ public interface EduRepository extends BaseRepository<Edu, Integer> {
 
     @Query("select e from Edu e " +
             "join fetch e.municipality " +
-            "left join fetch e.eduFormDatas ef on ef.formId = ?2 and YEAR(ef.sendDate) = ?3 " +
-            "where e.municipalityId = ?1")
+            "left join fetch e.eduFormDatas ef " +
+            "where e.municipalityId = ?1 " +
+            "and (ef is null or (ef.formId = ?2 and YEAR(ef.sendDate) = ?3))")
     List<Edu> findAllByForm(int municipalityId, int formId, int year);
 
     @Query("select e from Edu e " +
             "join fetch e.municipality " +
-            "left join fetch e.eduFormDatas ef on ef.formId = ?1 and YEAR(ef.sendDate) = ?2")
+            "left join fetch e.eduFormDatas ef " +
+            "where ef is null or (ef.formId = ?1 and YEAR(ef.sendDate) = ?2)")
     List<Edu> findAllByForm(int formId, int year);
 }
 

@@ -8,14 +8,15 @@ import java.time.LocalDateTime;
  * Created by to on 12.07.2017.
  */
 public class FormCoreDto {
-    private long templateFileId;
-    private long checkFileId;
+    private Integer templateFileId;
+    private Integer checkFileId;
     private int id;
     private String name;
     private LocalDateTime submissionDate;
     private int formTypeId;
+    private String formType;
     private boolean isCheckRequired;
-    private Boolean isNotificationHidden;
+    private boolean isNotificationHidden;
     private long remainingTimeSeconds;
     private boolean isBlocked;
 
@@ -24,6 +25,7 @@ public class FormCoreDto {
         this.name = f.getName();
         this.submissionDate = f.getSubmissionDate();
         this.formTypeId = f.getFormTypeId();
+        this.formType = f.getFormType().getName();
         this.isCheckRequired = f.isCheckRequired();
         this.isNotificationHidden = f.getNotificationHidden();
         this.templateFileId = f.getTemplateFileId();
@@ -62,6 +64,14 @@ public class FormCoreDto {
         this.formTypeId = formTypeId;
     }
 
+    public String getFormType() {
+        return formType;
+    }
+
+    public void setFormType(String formType) {
+        this.formType = formType;
+    }
+
     public boolean isCheckRequired() {
         return isCheckRequired;
     }
@@ -82,7 +92,7 @@ public class FormCoreDto {
         return templateFileId;
     }
 
-    public void setTemplateFileId(long templateFileId) {
+    public void setTemplateFileId(Integer templateFileId) {
         this.templateFileId = templateFileId;
     }
 
@@ -90,7 +100,7 @@ public class FormCoreDto {
         return checkFileId;
     }
 
-    public void setCheckFileId(long checkFileId) {
+    public void setCheckFileId(Integer checkFileId) {
         this.checkFileId = checkFileId;
     }
 

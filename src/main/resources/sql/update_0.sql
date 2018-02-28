@@ -20,3 +20,11 @@ ALTER TABLE public.file ADD COLUMN file_path VARCHAR(255) DEFAULT 'empty' NOT NU
   ADD COLUMN file_name VARCHAR(255) DEFAULT 'empty' NOT NULL;
 
 ALTER table mm_regular__summary_form ADD COLUMN file_id INT REFERENCES file(id);
+
+INSERT into file (id, code_page, file_path, file_name) values (0, 0, '', '');
+update form set template_file_id = 0 where template_file_id is null;
+update form set check_file_id = 0 where check_file_id is null;
+alter TABLE form alter COLUMN template_file_id set not null,
+  alter COLUMN template_file_id set default 0;
+alter TABLE form alter COLUMN check_file_id set not null,
+  alter COLUMN check_file_id set default 0;

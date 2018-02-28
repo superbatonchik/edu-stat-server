@@ -18,8 +18,8 @@ import ru.cmo.edu.service.JwtService;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -45,12 +45,12 @@ public class FormController extends BaseController {
 
     @PreAuthorize("hasAnyAuthority('region','ministry','municipality','edu')")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public ResponseEntity getFormList(@RequestParam(required = false) Set<Integer> formTypeIds, @RequestHeader HttpHeaders headers) throws InvalidTokenException {
+    public ResponseEntity getFormList(@RequestParam(required = false) List<Integer> formTypeIds, @RequestHeader HttpHeaders headers) throws InvalidTokenException {
         Role role = getRole();
         String token = headers.getFirst("Authorization");
         int userId = jwtService.getUserId(token);
-        List<FormCoreDto> dtos = null;
-        List<Integer> blockedIds = null;
+        List<FormCoreDto> dtos = new ArrayList<>();
+        List<Integer> blockedIds = new ArrayList<>();
         switch (role) {
             case region:
             case ministry:

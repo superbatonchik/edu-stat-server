@@ -23,7 +23,8 @@ public interface MunicipalityRepository extends BaseRepository<Municipality, Int
     List<Municipality> findAll(int regionId);
 
     @Query("select m from Municipality m " +
-            "left join m.municipalityFormDatas fd on fd.formId = ?1 and YEAR(fd.sendDate) = ?2" +
+            "left join m.municipalityFormDatas fd " +
+            "where fd is null or (fd.formId = ?1 and YEAR(fd.sendDate) = ?2)" +
             "order by m.name")
     List<Municipality> findAllByForm(int formId, int year);
 
