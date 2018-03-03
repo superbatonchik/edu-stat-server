@@ -20,12 +20,12 @@
 
     </appender>
 
-    <logger name="ru.cmo.edu" level="DEBUG" additivity="false">
+    <logger name="ru.cmo.edu" level="TRACE" additivity="false">
         <appender-ref ref="CONSOLE" />
         <appender-ref ref="FILE" />
     </logger>
 
-    <logger name="org.springframework" level="DEBUG" additivity="false">
+    <logger name="org.springframework" level="INFO" additivity="false">
         <appender-ref ref="CONSOLE" />
         <appender-ref ref="FILE" />
     </logger>

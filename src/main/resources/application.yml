@@ -18,10 +18,10 @@ spring:
     serialization:
       write-dates-as-timestamps: false
 
-
-
 jwt:
   header: Authorization
   secret: bigSecret
   expiration: 608400
+app:
+  storage-path: C:\ros\storage
 
