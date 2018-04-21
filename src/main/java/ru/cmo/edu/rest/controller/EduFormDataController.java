@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import ru.cmo.edu.data.dto.*;
+import ru.cmo.edu.data.entity.enumerable.FormStatusEnum;
 import ru.cmo.edu.data.entity.enumerable.FormTypeEnum;
 import ru.cmo.edu.data.resource.*;
 import ru.cmo.edu.rest.security.Role;
@@ -149,7 +150,8 @@ public class EduFormDataController extends BaseController {
             resource.add(linkTo(methodOn(EduFormDataController.class).getEduKindList(t.getId(), formTypeId, isArchived)).withSelfRel());
             resource.setLinkCaption(strings.get("title.edu-kind"));
             resource.setLinkSubCaption(t.getName());
-            resource.setStatus(statuses.get(t.getId()));
+            Integer status = statuses.get(t.getId());
+            resource.setStatus(status == null ? FormStatusEnum.UNKNOWN : status);
             return resource;
         }).collect(Collectors.toList());
         return ResponseEntity.ok(resources);
@@ -165,7 +167,8 @@ public class EduFormDataController extends BaseController {
             resource.add(linkTo(methodOn(EduFormDataController.class).getEduList(municipalityId, t.getId(), formTypeId, isArchived)).withSelfRel());
             resource.setLinkCaption(strings.get("title.edu"));
             resource.setLinkSubCaption(t.getName());
-            resource.setStatus(statuses.get(t.getId()));
+            Integer status = statuses.get(t.getId());
+            resource.setStatus(status == null ? FormStatusEnum.UNKNOWN : status);
             return resource;
         }).collect(Collectors.toList());
         return ResponseEntity.ok(resources);
@@ -185,7 +188,8 @@ public class EduFormDataController extends BaseController {
             }
             resource.setLinkCaption(caption);
             resource.setLinkSubCaption(t.getSysName());
-            resource.setStatus(statuses.get(t.getId()));
+            Integer status = statuses.get(t.getId());
+            resource.setStatus(status == null ? FormStatusEnum.UNKNOWN : status);
             return resource;
         }).collect(Collectors.toList());
         return ResponseEntity.ok(resources);
@@ -204,14 +208,5 @@ public class EduFormDataController extends BaseController {
             return resource;
         }).collect(Collectors.toList());
         return ResponseEntity.ok(resources);
-    }
-
-    @PreAuthorize("hasAnyAuthority('region', 'ministry', 'municipality')")
-    @RequestMapping(value = "/haveform", method = RequestMethod.GET)
-    public ResponseEntity getEduListHaveFormData(@RequestParam(required = false) Integer municipalityId,
-                                                 @RequestParam Integer formId,
-                                                 @RequestParam Integer year) {
-        List<EduWithFormDataDto> dtos = eduService.getAllByFormDto(EduWithFormDataDto.class, municipalityId, formId, year);
-        return ResponseEntity.ok(dtos);
     }
 }

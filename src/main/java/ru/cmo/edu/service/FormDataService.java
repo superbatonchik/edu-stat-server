@@ -1,12 +1,19 @@
 package ru.cmo.edu.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.cmo.edu.config.Messages;
 import ru.cmo.edu.data.dto.FormDataCoreDto;
 import ru.cmo.edu.data.entity.*;
+import ru.cmo.edu.data.entity.enumerable.DocumentFormatEnum;
 import ru.cmo.edu.data.entity.enumerable.FormStatusEnum;
+import ru.cmo.edu.data.entity.enumerable.FormTypeEnum;
 import ru.cmo.edu.data.repository.*;
 
+import javax.persistence.PersistenceException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -17,6 +24,8 @@ import java.util.stream.Collectors;
 @Service
 public class FormDataService {
 
+    private Logger logger = LoggerFactory.getLogger(FormDataService.class);
+
     private final EduFormDataRepository eduFormDataRepository;
 
     private final MunicipalityFormDataRepository municipalityFormDataRepository;
@@ -24,14 +33,18 @@ public class FormDataService {
     private final RegionFormDataRepository regionFormDataRepository;
 
     private final FormStatusRepository formStatusRepository;
+    private final Messages strings;
 
 
     @Autowired
-    public FormDataService(EduFormDataRepository eduFormDataRepository, MunicipalityFormDataRepository municipalityFormDataRepository, RegionFormDataRepository regionFormDataRepository, FormStatusRepository formStatusRepository) {
+    public FormDataService(EduFormDataRepository eduFormDataRepository, MunicipalityFormDataRepository municipalityFormDataRepository,
+                           RegionFormDataRepository regionFormDataRepository, FormStatusRepository formStatusRepository,
+                           Messages strings) {
         this.eduFormDataRepository = eduFormDataRepository;
         this.municipalityFormDataRepository = municipalityFormDataRepository;
         this.regionFormDataRepository = regionFormDataRepository;
         this.formStatusRepository = formStatusRepository;
+        this.strings = strings;
     }
 
     public List<FormDataCoreDto> getEduFormDataDto(int eduId, int formTypeId, boolean isArchived) {
@@ -43,6 +56,47 @@ public class FormDataService {
         }
         List<FormDataCoreDto> dtos = eduFormDatas.stream().map(FormDataCoreDto::new).collect(Collectors.toList());
         return dtos;
+    }
+
+    public void editFormData(FormDataCoreDto formData) throws PersistenceException {
+        logger.info("Started creating or updating form data...");
+
+        BaseFormData data = new BaseFormData();
+        data.setDocumentFormatId(DocumentFormatEnum.XLSX);
+        data.setFileId(formData.getFileId());
+        data.setFormId(formData.getForm().getId());
+        data.setSendDate(LocalDateTime.now());
+        data.setStatus(formData.getStatus());
+        if (formData.getId() > 0) {
+            logger.info("...found form data {}", formData.getId());
+            data.setId(formData.getId());
+        } else {
+            logger.info("...created new form data {}", formData.getId());
+        }
+        int formTypeId = formData.getForm().getFormTypeId();
+        try {
+            if (formTypeId == FormTypeEnum.EDU || formTypeId == FormTypeEnum.ADD_EDU) {
+                EduFormData eduFormData = (EduFormData) data;
+                eduFormData.setEduId(formData.getOrganizationId());
+                eduFormDataRepository.save(eduFormData);
+            } else if (formTypeId == FormTypeEnum.MUNICIPALITY || formTypeId == FormTypeEnum.ADD_MUNICIPALITY) {
+                MunicipalityFormData municipalityFormData = (MunicipalityFormData) data;
+                municipalityFormData.setMunicipalityId(formData.getOrganizationId());
+                municipalityFormDataRepository.save(municipalityFormData);
+            } else if (formTypeId == FormTypeEnum.REGION || formTypeId == FormTypeEnum.ADD_REGION) {
+                RegionFormData regionFormData = (RegionFormData) data;
+                regionFormData.setRegionId(formData.getOrganizationId());
+                regionFormDataRepository.save(regionFormData);
+            } else {
+                logger.error("Could not find form type {}, {}", formTypeId, formData.getForm().getFormType());
+                logger.error("...completed with errors");
+                throw new PersistenceException(strings.get("message.error-formtype-unavailable"));
+            }
+        } catch (Exception e) {
+            logger.error("...completed with errors", e);
+            throw new PersistenceException(strings.get("message.error-save"), e);
+        }
+        logger.error("...completed successfully");
     }
 
     public List<FormDataCoreDto> getMunicipalityFormDataDto(int municipalityId, int formTypeId, boolean isArchived) {
