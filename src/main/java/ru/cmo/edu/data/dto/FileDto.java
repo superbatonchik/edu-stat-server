@@ -8,6 +8,9 @@ public class FileDto {
     private String filePath;
     private String fileName;
 
+    public FileDto() {
+    }
+
     public FileDto(File f) {
         this.id = f.getId();
         this.codePage = f.getCodePage();

@@ -51,7 +51,7 @@ public class JpaUserDetailsService implements UserDetailsService {
         if (credentials == null) {
             throw new UsernameNotFoundException("could not find the user: " + s);
         } else {
-            CredentialsTypeEnum credentialsType = CredentialsTypeEnum.get(credentials.getLoginType());
+            CredentialsTypeEnum credentialsType = CredentialsTypeEnum.valueOf(credentials.getLoginType());
             List<GrantedAuthority> authorities = null;
             int accessRights = 0;
             BaseUser user = new BaseUser();

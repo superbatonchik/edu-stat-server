@@ -14,7 +14,7 @@ import java.util.Set;
  */
 
 @Repository
-public interface FormRepository extends CrudRepository<Form, Integer> {
+public interface FormRepository extends BaseRepository<Form, Integer> {
 
     @Query("select f from Form f " +
             "left join fetch f.formType ft " +
@@ -35,13 +35,13 @@ public interface FormRepository extends CrudRepository<Form, Integer> {
 
     @Query(value = "SELECT bf.form_id FROM " +
             "  mm_edu__blocked_form bf " +
-            "WHERE bf.edu_id = ?1", nativeQuery = true)
-    List<Object[]> findBlockedIdsByEdu(int id);
+            "WHERE bf.edu_id IN ?1", nativeQuery = true)
+    List<Object[]> findBlockedIdsByEduIds(Set<Integer> ids);
 
     @Query(value = "SELECT bf.form_id FROM " +
             "  mm_municipality__blocked_form bf " +
-            "WHERE bf.municipality_id = ?1", nativeQuery = true)
-    List<Object[]> findBlockedIdsByMunicipality(int id);
+            "WHERE bf.municipality_id IN ?1", nativeQuery = true)
+    List<Object[]> findBlockedIdsByMunicipalityIds(Set<Integer> ids);
 
     @Query("select s from MmRegularSummaryForm s " +
             "left join fetch s.regularForm rf " +

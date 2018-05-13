@@ -12,15 +12,17 @@ import java.util.List;
  */
 
 @Repository
-public interface EduFormDataRepository extends CrudRepository<EduFormData, Integer> {
+public interface EduFormDataRepository extends FormDataRepository<EduFormData, Integer> {
 
+    @Override
     @Query("select ef from EduFormData ef join ef.form f " +
-            "where ef.eduId = ?1 and f.formTypeId = ?2 and YEAR(ef.sendDate) = YEAR(CURRENT_DATE) " +
+            "where ef.eduId = ?1 and f.formTypeId = ?2 and ((YEAR(ef.sendDate) = YEAR(CURRENT_DATE) and true = ?3) or (YEAR(ef.sendDate) < YEAR(CURRENT_DATE) and true = ?3)) " +
             "order by ef.sendDate desc")
-    List<EduFormData> findAll(int eduId, int formTypeId);
+    List<EduFormData> findAll(int orgId, int formTypeId, boolean isArchived);
 
+    @Override
     @Query("select ef from EduFormData ef join ef.form f " +
-            "where ef.eduId = ?1 and f.formTypeId = ?2 and YEAR(ef.sendDate) < YEAR(CURRENT_DATE) " +
+            "where ef.eduId = ?1 and f.id = ?2 and YEAR(ef.sendDate) = ?3 " +
             "order by ef.sendDate desc")
-    List<EduFormData> findAllArchived(int eduId, int formTypeId);
+    List<EduFormData> findExact(int orgId, int formId, int year);
 }

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.cmo.edu.data.dto.EduWithFormDataDto;
 import ru.cmo.edu.data.dto.FormDataCoreDto;
 import ru.cmo.edu.data.dto.MunicipalityWithFormDataDto;
+import ru.cmo.edu.data.entity.enumerable.FormTypeEnum;
 import ru.cmo.edu.rest.security.Role;
 import ru.cmo.edu.service.EduService;
 import ru.cmo.edu.service.FormDataService;
@@ -42,15 +43,25 @@ public class FormDataController extends BaseController {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity edit(@RequestBody FormDataCoreDto formData) {
         Role role = getRole();
-        if (role == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
         if (!role.canUpload(formData.getForm().getFormTypeId())) {
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
         }
 
         formDataService.editFormData(formData);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.ok(formData);
+    }
+
+    @PreAuthorize("hasAnyAuthority('region', 'municipality', 'edu')")
+    @RequestMapping(method = RequestMethod.GET)
+    public ResponseEntity find(@RequestParam int organizationId,
+                               @RequestParam int formId,
+                               @RequestParam int formTypeId,
+                               @RequestParam int year) {
+        List<FormDataCoreDto> foundFormDatas = formDataService.getFormDataDto(organizationId, formId, FormTypeEnum.valueOf(formTypeId), year);
+        if (foundFormDatas.size() > 0) {
+            return ResponseEntity.ok(foundFormDatas.get(0));
+        }
+        return ResponseEntity.ok().build();
     }
 
     @PreAuthorize("hasAnyAuthority('region', 'ministry', 'municipality')")

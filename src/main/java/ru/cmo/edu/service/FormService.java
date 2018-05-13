@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import ru.cmo.edu.data.dto.FormCoreDto;
 import ru.cmo.edu.data.entity.Form;
 import ru.cmo.edu.data.entity.MmRegularSummaryForm;
+import ru.cmo.edu.data.entity.enumerable.FormTypeEnum;
 import ru.cmo.edu.data.repository.FormRepository;
 
 import java.lang.reflect.InvocationTargetException;
@@ -29,8 +30,8 @@ public class FormService {
         this.formRepository = formRepository;
     }
 
-    public <T extends FormCoreDto> List<T> getAllDto(Class<T> clazz, Integer... formTypeIds) {
-        List<Form> list = formRepository.findAll(Arrays.stream(formTypeIds).collect(Collectors.toSet()));
+    public <T extends FormCoreDto> List<T> getAllDto(Class<T> clazz, FormTypeEnum... formTypes) {
+        List<Form> list = formRepository.findAll(Arrays.stream(formTypes).map(FormTypeEnum::getValue).collect(Collectors.toSet()));
         return toDto(clazz, list);
     }
 

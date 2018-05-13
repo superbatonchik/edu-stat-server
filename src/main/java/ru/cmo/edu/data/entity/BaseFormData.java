@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
  */
 @MappedSuperclass
 public class BaseFormData {
-    private int id;
+    protected int id;
     private int documentFormatId;
     private int formId;
     private LocalDateTime sendDate;

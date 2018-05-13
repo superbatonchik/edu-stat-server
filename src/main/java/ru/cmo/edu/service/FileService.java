@@ -12,9 +12,7 @@ import ru.cmo.edu.data.repository.FileRepository;
 
 import javax.xml.bind.DatatypeConverter;
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
@@ -43,7 +41,7 @@ public class FileService {
         return file;
     }
 
-    public boolean saveFile(InputStream is, String documentFormat, String storageDirPostfix, Integer fileId) throws IOException {
+    public File saveFile(InputStream is, String documentFormat, String storageDirPostfix, Integer fileId) throws IOException {
         java.io.File tempFile = null;
         try {
             tempFile = java.io.File.createTempFile("upload_", ".tmp");
@@ -56,9 +54,9 @@ public class FileService {
             md = MessageDigest.getInstance("MD5");
         } catch (NoSuchAlgorithmException e) {
             logger.error("", e);
-            return false;
+            return null;
         }
-        byte[] buffer = new byte[1024];
+        byte[] buffer = new byte[4096];
         int bytesRead;
         try (FileOutputStream outStream = new FileOutputStream(tempFile.getPath())) {
             while ((bytesRead = is.read(buffer)) > 0) {
@@ -69,9 +67,10 @@ public class FileService {
             logger.error("Error occurred while reading http stream", e);
             throw new IOException(strings.get("message.error-upload"), e);
         }
+        logger.debug("Bytes read {}", tempFile.length());
         byte[] digest = md.digest();
         String hash = DatatypeConverter.printHexBinary(digest).toUpperCase();
-        if (DocumentFormatEnum.getByName(documentFormat) == null) {
+        if (DocumentFormatEnum.value(documentFormat) == null) {
             documentFormat = "xlsx";
         }
         String relativePathStr = getRelativePath(hash, documentFormat);
@@ -79,7 +78,8 @@ public class FileService {
         Path targetPath = Paths.get(storagePathStr, storageDirPostfix, relativePathStr);
         Path storagePath = Paths.get(storagePathStr);
         try {
-            Files.copy(tempFile.toPath(), targetPath);
+            targetPath.toFile().mkdirs();
+            Files.copy(tempFile.toPath(), targetPath, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             logger.error("Error occurred while creating file at storage", e);
             throw new IOException(strings.get("message.error-upload"), e);
@@ -91,6 +91,11 @@ public class FileService {
             if (existingFile.exists()) {
                 existingFile.delete();
             }
+            java.io.File parent = existingFile.getParentFile();
+            while (parent.list().length == 0) {
+                parent.delete();
+                parent = parent.getParentFile();
+            }
             fileObj = fileRepository.findById(fileId);
         }
         if (fileObj == null) {
@@ -101,7 +106,7 @@ public class FileService {
         fileObj.setFilePath(storagePath.relativize(targetPath).toString());
 
         fileRepository.save(fileObj);
-        return true;
+        return fileObj;
     }
 
     private static String getRelativePath(String hash, String ext) {

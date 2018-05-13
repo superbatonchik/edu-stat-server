@@ -12,6 +12,13 @@ public class FormDataCoreDto extends BaseFormDataCoreDto {
 
     private int organizationId;
 
+    public FormDataCoreDto() {}
+
+    public FormDataCoreDto(BaseFormData f, int organizationId) {
+        super(f);
+        this.organizationId = organizationId;
+    }
+
     public FormDataCoreDto(EduFormData f) {
         super(f);
         this.organizationId = f.getEduId();

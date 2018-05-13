@@ -9,6 +9,9 @@ public class RegionCoreDto {
     private int id;
     private String name;
 
+    public RegionCoreDto() {
+    }
+
     public RegionCoreDto(Region r) {
         id = r.getId();
         name = r.getName();

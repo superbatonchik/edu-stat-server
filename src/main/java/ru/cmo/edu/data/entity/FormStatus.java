@@ -30,20 +30,8 @@ import javax.persistence.*;
                         "from edu_form_data fd " +
                         "join edu eo on eo.id = fd.edu_id " +
                         "where " +
-                        "date_part(cast('year' as text), fd.send_date) = date_part(cast('year' as text), now()) " +
-                        "group by eo.municipality_id", resultSetMapping = "formStatusMapping"),
-        @NamedNativeQuery(
-                name = "FormStatus.getMunicipalityStatusForEduViewArchived",
-                query = "select " +
-                        "eo.municipality_id as id, " +
-                        "count(case when fd.status = 0 then 1 end) as ok, " +
-                        "count(case when fd.status = 1 then 1 end) as expired, " +
-                        "count(case when fd.status = 2 then 1 end) as errors, " +
-                        "count(case when fd.status = 3 then 1 end) as expired_errors " +
-                        "from edu_form_data fd " +
-                        "join edu eo on eo.id = fd.edu_id " +
-                        "where " +
-                        "date_part(cast('year' as text), fd.send_date) < date_part(cast('year' as text), now()) " +
+                        "(extract(year from fd.send_date) = extract(year from now()) and ?1) or " +
+                        "(extract(year from fd.send_date) = extract(year from now()) and ?1) " +
                         "group by eo.municipality_id", resultSetMapping = "formStatusMapping"),
         @NamedNativeQuery(
                 name = "FormStatus.getEduKindStatusForEduView",
@@ -57,21 +45,10 @@ import javax.persistence.*;
                         "join edu eo on eo.id = fd.edu_id " +
                         "where " +
                         "eo.municipality_id = ?1 and " +
-                        "date_part(cast('year' as text), fd.send_date) = date_part(cast('year' as text), now()) " +
-                        "group by eo.edu_kind_id", resultSetMapping = "formStatusMapping"),
-        @NamedNativeQuery(
-                name = "FormStatus.getEduKindStatusForEduViewArchived",
-                query = "select " +
-                        "eo.edu_kind_id as id, " +
-                        "count(case when fd.status = 0 then 1 end) as ok, " +
-                        "count(case when fd.status = 1 then 1 end) as expired, " +
-                        "count(case when fd.status = 2 then 1 end) as errors, " +
-                        "count(case when fd.status = 3 then 1 end) as expired_errors " +
-                        "from edu_form_data fd " +
-                        "join edu eo on eo.id = fd.edu_id " +
-                        "where " +
-                        "eo.municipality_id = ?1 and " +
-                        "date_part(cast('year' as text), fd.send_date) < date_part(cast('year' as text), now()) " +
+                        "(" +
+                        "(extract(year from fd.send_date) = extract(year from now()) and ?2) or " +
+                        "(extract(year from fd.send_date) = extract(year from now()) and ?2)" +
+                        ") " +
                         "group by eo.edu_kind_id", resultSetMapping = "formStatusMapping"),
         @NamedNativeQuery(
                 name = "FormStatus.getEduStatus",
@@ -86,22 +63,10 @@ import javax.persistence.*;
                         "where " +
                         "eo.municipality_id = ?1 and " +
                         "eo.edu_kind_id = ?2 and " +
-                        "date_part(cast('year' as text), fd.send_date) = date_part(cast('year' as text), now()) " +
-                        "group by eo.id", resultSetMapping = "formStatusMapping"),
-        @NamedNativeQuery(
-                name = "FormStatus.getEduStatusArchived",
-                query = "select " +
-                        "eo.id as id, " +
-                        "count(case when fd.status = 0 then 1 end) as ok, " +
-                        "count(case when fd.status = 1 then 1 end) as expired, " +
-                        "count(case when fd.status = 2 then 1 end) as errors, " +
-                        "count(case when fd.status = 3 then 1 end) as expired_errors " +
-                        "from edu_form_data fd " +
-                        "join edu eo on eo.id = fd.edu_id " +
-                        "where " +
-                        "eo.municipality_id = ?1 and " +
-                        "eo.edu_kind_id = ?2 and " +
-                        "date_part(cast('year' as text), fd.send_date) < date_part(cast('year' as text), now()) " +
+                        "(" +
+                        "(extract(year from fd.send_date) = extract(year from now()) and ?3) or " +
+                        "(extract(year from fd.send_date) = extract(year from now()) and ?3)" +
+                        ") " +
                         "group by eo.id", resultSetMapping = "formStatusMapping"),
         @NamedNativeQuery(
                 name = "FormStatus.getMunicipalityStatus",
@@ -113,21 +78,9 @@ import javax.persistence.*;
                         "  count(CASE WHEN fd.status = 3 THEN 1 END) AS expired_errors " +
                         "FROM municipality_form_data fd " +
                         "WHERE " +
-                        "date_part(cast('year' as TEXT), fd.send_date) = date_part(cast('year' as TEXT), now()) " +
-                        "GROUP BY fd.municipality_id"),
-        @NamedNativeQuery(
-                name = "FormStatus.getMunicipalityStatusArchived",
-                query = "SELECT " +
-                        "  fd.municipality_id AS id, " +
-                        "  count(CASE WHEN fd.status = 0 THEN 1 END) AS ok, " +
-                        "  count(CASE WHEN fd.status = 1 THEN 1 END) AS expired, " +
-                        "  count(CASE WHEN fd.status = 2 THEN 1 END) AS errors, " +
-                        "  count(CASE WHEN fd.status = 3 THEN 1 END) AS expired_errors " +
-                        "FROM municipality_form_data fd " +
-                        "WHERE " +
-                        "date_part(cast('year' as TEXT), fd.send_date) < date_part(cast('year' as TEXT), now()) " +
-                        "GROUP BY fd.municipality_id"
-        )
+                        "(extract(year from fd.send_date) = extract(year from now()) and ?1) or " +
+                        "(extract(year from fd.send_date) = extract(year from now()) and ?1) " +
+                        "GROUP BY fd.municipality_id")
 })
 public class FormStatus {
     @Id

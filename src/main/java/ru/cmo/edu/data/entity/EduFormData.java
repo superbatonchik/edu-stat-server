@@ -11,6 +11,20 @@ public class EduFormData extends BaseFormData {
     private int eduId;
     private Edu edu;
 
+    @Id
+    @SequenceGenerator(name="edu_form_data_generator", sequenceName = "form_data_id_seq", allocationSize=50)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "edu_form_data_generator")
+    @Column(name = "id")
+    @Override
+    public int getId() {
+        return super.id;
+    }
+
+    @Override
+    public void setId(int id) {
+        super.id = id;
+    }
+
     @Basic
     @Column(name = "edu_id", insertable = false, updatable = false)
     public int getEduId() {

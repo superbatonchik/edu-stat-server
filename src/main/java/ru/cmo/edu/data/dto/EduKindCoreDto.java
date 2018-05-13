@@ -9,6 +9,9 @@ public class EduKindCoreDto {
     private int id;
     private String name;
 
+    public EduKindCoreDto() {
+    }
+
     public EduKindCoreDto(EduKind e) {
         id = e.getId();
         name = e.getName();

@@ -9,6 +9,9 @@ public class MunicipalityWithFormDataDto extends MunicipalityCoreDto {
 
     private List<FormDataCoreDto> formDatas;
 
+    public MunicipalityWithFormDataDto() {
+    }
+
     public MunicipalityWithFormDataDto(Municipality m) {
         super(m);
         formDatas = m.getMunicipalityFormDatas().stream().map(FormDataCoreDto::new).collect(Collectors.toList());

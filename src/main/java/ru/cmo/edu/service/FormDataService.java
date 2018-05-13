@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.cmo.edu.config.Messages;
+import ru.cmo.edu.data.FormDataFactory;
 import ru.cmo.edu.data.dto.FormDataCoreDto;
 import ru.cmo.edu.data.entity.*;
 import ru.cmo.edu.data.entity.enumerable.DocumentFormatEnum;
@@ -13,8 +14,8 @@ import ru.cmo.edu.data.entity.enumerable.FormTypeEnum;
 import ru.cmo.edu.data.repository.*;
 
 import javax.persistence.PersistenceException;
-import java.time.LocalDateTime;
 import java.util.List;
+
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -27,137 +28,86 @@ public class FormDataService {
     private Logger logger = LoggerFactory.getLogger(FormDataService.class);
 
     private final EduFormDataRepository eduFormDataRepository;
-
     private final MunicipalityFormDataRepository municipalityFormDataRepository;
-
     private final RegionFormDataRepository regionFormDataRepository;
-
     private final FormStatusRepository formStatusRepository;
+    private final FormDataRepositoryHolder formDataRepositoryHolder;
+    private final FormDataFactory formDataFactory;
     private final Messages strings;
 
-
     @Autowired
-    public FormDataService(EduFormDataRepository eduFormDataRepository, MunicipalityFormDataRepository municipalityFormDataRepository,
-                           RegionFormDataRepository regionFormDataRepository, FormStatusRepository formStatusRepository,
+    public FormDataService(EduFormDataRepository eduFormDataRepository,
+                           MunicipalityFormDataRepository municipalityFormDataRepository,
+                           RegionFormDataRepository regionFormDataRepository,
+                           FormStatusRepository formStatusRepository,
+                           FormDataRepositoryHolder formDataRepositoryHolder,
+                           FormDataFactory formDataFactory,
                            Messages strings) {
         this.eduFormDataRepository = eduFormDataRepository;
         this.municipalityFormDataRepository = municipalityFormDataRepository;
         this.regionFormDataRepository = regionFormDataRepository;
         this.formStatusRepository = formStatusRepository;
+        this.formDataRepositoryHolder = formDataRepositoryHolder;
+        this.formDataFactory = formDataFactory;
         this.strings = strings;
-    }
-
-    public List<FormDataCoreDto> getEduFormDataDto(int eduId, int formTypeId, boolean isArchived) {
-        List<EduFormData> eduFormDatas;
-        if (isArchived) {
-             eduFormDatas = eduFormDataRepository.findAllArchived(eduId, formTypeId);
-        } else {
-            eduFormDatas = eduFormDataRepository.findAll(eduId, formTypeId);
-        }
-        List<FormDataCoreDto> dtos = eduFormDatas.stream().map(FormDataCoreDto::new).collect(Collectors.toList());
-        return dtos;
     }
 
     public void editFormData(FormDataCoreDto formData) throws PersistenceException {
         logger.info("Started creating or updating form data...");
 
-        BaseFormData data = new BaseFormData();
-        data.setDocumentFormatId(DocumentFormatEnum.XLSX);
+        int formTypeId = formData.getForm().getFormTypeId();
+        FormTypeEnum formType = FormTypeEnum.valueOf(formTypeId);
+        BaseFormData data = formDataFactory.create(formType, formData.getOrganizationId());
+        data.setDocumentFormatId(DocumentFormatEnum.XLSX.getIntValue());
         data.setFileId(formData.getFileId());
         data.setFormId(formData.getForm().getId());
-        data.setSendDate(LocalDateTime.now());
+        data.setSendDate(formData.getSendDate());
         data.setStatus(formData.getStatus());
         if (formData.getId() > 0) {
-            logger.info("...found form data {}", formData.getId());
+            logger.info("...editing form data {}", formData.getId());
             data.setId(formData.getId());
         } else {
-            logger.info("...created new form data {}", formData.getId());
+            logger.info("...creating new form data");
         }
-        int formTypeId = formData.getForm().getFormTypeId();
-        try {
-            if (formTypeId == FormTypeEnum.EDU || formTypeId == FormTypeEnum.ADD_EDU) {
-                EduFormData eduFormData = (EduFormData) data;
-                eduFormData.setEduId(formData.getOrganizationId());
-                eduFormDataRepository.save(eduFormData);
-            } else if (formTypeId == FormTypeEnum.MUNICIPALITY || formTypeId == FormTypeEnum.ADD_MUNICIPALITY) {
-                MunicipalityFormData municipalityFormData = (MunicipalityFormData) data;
-                municipalityFormData.setMunicipalityId(formData.getOrganizationId());
-                municipalityFormDataRepository.save(municipalityFormData);
-            } else if (formTypeId == FormTypeEnum.REGION || formTypeId == FormTypeEnum.ADD_REGION) {
-                RegionFormData regionFormData = (RegionFormData) data;
-                regionFormData.setRegionId(formData.getOrganizationId());
-                regionFormDataRepository.save(regionFormData);
-            } else {
-                logger.error("Could not find form type {}, {}", formTypeId, formData.getForm().getFormType());
-                logger.error("...completed with errors");
-                throw new PersistenceException(strings.get("message.error-formtype-unavailable"));
-            }
-        } catch (Exception e) {
-            logger.error("...completed with errors", e);
-            throw new PersistenceException(strings.get("message.error-save"), e);
-        }
+        FormDataRepository formDataRepository = formDataRepositoryHolder.get(formType);
+        formDataRepository.save(data);
         logger.error("...completed successfully");
     }
 
-    public List<FormDataCoreDto> getMunicipalityFormDataDto(int municipalityId, int formTypeId, boolean isArchived) {
-        List<MunicipalityFormData> municipalityFormDatas;
-        if (isArchived) {
-            municipalityFormDatas = municipalityFormDataRepository.findAllArchived(municipalityId, formTypeId);
-        } else {
-            municipalityFormDatas = municipalityFormDataRepository.findAll(municipalityId, formTypeId);
-        }
-        List<FormDataCoreDto> dtos = municipalityFormDatas.stream().map(FormDataCoreDto::new).collect(Collectors.toList());
+    @SuppressWarnings("unchecked")
+    public List<FormDataCoreDto> getFormDataDto(int organizationId, FormTypeEnum formType, boolean isArchived) {
+        FormDataRepository repository = formDataRepositoryHolder.get(formType);
+        List forms = repository.findAll(organizationId, formType.getValue(), isArchived);
+        List<FormDataCoreDto> dtos = (List<FormDataCoreDto>) forms.stream().map(t -> new FormDataCoreDto((BaseFormData)t, organizationId)).collect(Collectors.toList());
         return dtos;
     }
 
-    public List<FormDataCoreDto> getRegionFormDataDto(int regionId, int formTypeId, boolean isArchived) {
-        List<RegionFormData> regionFormDatas;
-        if (isArchived) {
-            regionFormDatas = regionFormDataRepository.findAllArchived(regionId, formTypeId);
-        } else {
-            regionFormDatas = regionFormDataRepository.findAll(regionId, formTypeId);
-        }
-        List<FormDataCoreDto> dtos = regionFormDatas.stream().map(FormDataCoreDto::new).collect(Collectors.toList());
+    @SuppressWarnings("unchecked")
+    public List<FormDataCoreDto> getFormDataDto(int organizationId, int formId, FormTypeEnum formType, int year) {
+        logger.info("Searching form id: {}, year: {} for {} id: {}", formId, year, formType, organizationId);
+        FormDataRepository repository = formDataRepositoryHolder.get(formType);
+        List forms = repository.findExact(organizationId, formId, year);
+        List<FormDataCoreDto> dtos = (List<FormDataCoreDto>) forms.stream().map(t -> new FormDataCoreDto((BaseFormData)t, organizationId)).collect(Collectors.toList());
         return dtos;
     }
 
     public Map<Integer, Integer> getMunicipalityStatusForEdu(int regionId, boolean isArchived) {
-        List<FormStatus> statuses;
-        if (isArchived) {
-            statuses = formStatusRepository.getMunicipalityStatusForEduViewArchived(/*regionId*/);
-        } else {
-            statuses = formStatusRepository.getMunicipalityStatusForEduView(/*regionId*/);
-        }
+        List<FormStatus> statuses = formStatusRepository.getMunicipalityStatusForEduView(/*regionId*/ isArchived);
         return makeDict(statuses);
     }
 
     public Map<Integer, Integer> getEduKindStatusForEdu(int regionId, int municipalityId, boolean isArchived) {
-        List<FormStatus> statuses;
-        if (isArchived) {
-            statuses = formStatusRepository.getEduKindStatusForEduViewArchived(/*regionId*/municipalityId);
-        } else {
-            statuses = formStatusRepository.getEduKindStatusForEduView(/*regionId*/municipalityId);
-        }
+        List<FormStatus> statuses = formStatusRepository.getEduKindStatusForEduView(/*regionId*/municipalityId, isArchived);
         return makeDict(statuses);
     }
 
     public Map<Integer, Integer> getEduStatus(int regionId, int municipalityId, int eduKindId, boolean isArchived) {
-        List<FormStatus> statuses;
-        if (isArchived) {
-            statuses = formStatusRepository.getEduStatusArchived(/*regionId*/municipalityId, eduKindId);
-        } else {
-            statuses = formStatusRepository.getEduStatus(/*regionId*/municipalityId, eduKindId);
-        }
+        List<FormStatus> statuses = formStatusRepository.getEduStatus(/*regionId*/municipalityId, eduKindId, isArchived);
         return makeDict(statuses);
     }
 
     public Map<Integer, Integer> getMunicipalityStatus(int regionId, boolean isArchived) {
-        List<FormStatus> statuses;
-        if (isArchived) {
-            statuses = formStatusRepository.getMunicipalityStatusArchived(/*regionId*/);
-        } else {
-            statuses = formStatusRepository.getMunicipalityStatus(/*regionId*/);
-        }
+        List<FormStatus> statuses = formStatusRepository.getMunicipalityStatus(/*regionId*/ isArchived);
         return makeDict(statuses);
     }
 

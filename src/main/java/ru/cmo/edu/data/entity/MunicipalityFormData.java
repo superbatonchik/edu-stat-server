@@ -11,6 +11,20 @@ public class MunicipalityFormData extends BaseFormData {
     private int municipalityId;
     private Municipality municipality;
 
+    @Id
+    @SequenceGenerator(name="municipality_form_data_generator", sequenceName = "municipality_form_data_id_seq", allocationSize=50)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "municipality_form_data_generator")
+    @Column(name = "id")
+    @Override
+    public int getId() {
+        return super.id;
+    }
+
+    @Override
+    public void setId(int id) {
+        super.id = id;
+    }
+
     @Basic
     @Column(name = "municipality_id", insertable = false, updatable = false)
     public int getMunicipalityId() {

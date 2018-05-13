@@ -16,6 +16,9 @@ public class EduCoreDto {
     private String sysName;
     private MunicipalityCoreDto municipality;
 
+    public EduCoreDto() {
+    }
+
     public EduCoreDto(Edu e) {
         this.id = e.getId();
         this.fullname = e.getFullname();

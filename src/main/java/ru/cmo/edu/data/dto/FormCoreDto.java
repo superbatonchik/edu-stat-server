@@ -20,6 +20,9 @@ public class FormCoreDto {
     private long remainingTimeSeconds;
     private boolean isBlocked;
 
+    public FormCoreDto() {
+    }
+
     public FormCoreDto(Form f) {
         this.id = f.getId();
         this.name = f.getName();

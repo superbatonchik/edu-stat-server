@@ -12,15 +12,17 @@ import java.util.List;
  */
 
 @Repository
-public interface MunicipalityFormDataRepository extends CrudRepository<MunicipalityFormData, Integer> {
+public interface MunicipalityFormDataRepository extends FormDataRepository<MunicipalityFormData, Integer> {
 
+    @Override
     @Query("select mf from MunicipalityFormData mf join mf.form f " +
-            "where mf.municipalityId = ?1 and f.formTypeId = ?2 and YEAR(mf.sendDate) = YEAR(CURRENT_DATE) " +
+            "where mf.municipalityId = ?1 and f.formTypeId = ?2 and ((YEAR(mf.sendDate) = YEAR(CURRENT_DATE) and true = ?3) or (YEAR(mf.sendDate) < YEAR(CURRENT_DATE) and true = ?3)) " +
             "order by mf.sendDate desc")
-    List<MunicipalityFormData> findAll(int municipalityId, int formTypeId);
+    List<MunicipalityFormData> findAll(int orgId, int formTypeId, boolean isArchived);
 
+    @Override
     @Query("select mf from MunicipalityFormData mf join mf.form f " +
-            "where mf.municipalityId = ?1 and f.formTypeId = ?2 and YEAR(mf.sendDate) < YEAR(CURRENT_DATE) " +
+            "where mf.municipalityId = ?1 and f.formTypeId = ?2 and YEAR(mf.sendDate) = ?3 " +
             "order by mf.sendDate desc")
-    List<MunicipalityFormData> findAllArchived(int municipalityId, int formTypeId);
+    List<MunicipalityFormData> findExact(int orgId, int formId, int year);
 }

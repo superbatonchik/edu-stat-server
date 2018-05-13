@@ -9,7 +9,7 @@ import ru.cmo.edu.data.entity.Credentials;
  */
 
 @Repository
-public interface CredentialsRepository extends CrudRepository<Credentials, Integer> {
+public interface CredentialsRepository extends BaseRepository<Credentials, Integer> {
 
     Credentials findByLogin(String login);
 }

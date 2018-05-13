@@ -3,26 +3,43 @@ package ru.cmo.edu.data.entity.enumerable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DocumentFormatEnum {
-    private final static Map<String, Integer> values = new HashMap<String, Integer>() {
-        { put("xls", 1); }
-        { put("xlsx", 2); }
-        { put("odt", 3); }
-    };
+public enum DocumentFormatEnum {
 
-    public static final int XLS = values.get("xls");
-    public static final int XLSX = values.get("xlsx");
-    public static final int ODT = values.get("odt");
+    XLS ("xls", 1),
+    XLSX ("xlsx", 2),
+    ODT ("odt", 3);
 
-    public static Integer getByName(String name) {
-        return values.get(name);
+    static Map<String, Enum> strMap = new HashMap<>();
+    static Map<Integer, Enum> intMap = new HashMap<>();
+
+    private final String strValue;
+    private final int intValue;
+
+    DocumentFormatEnum(String value, int i) {
+        this.strValue = value;
+        this.intValue = i;
     }
-    public static String getById(int id) {
-        for (Map.Entry<String, Integer> val: values.entrySet()) {
-            if (val.getValue() == id) {
-                return val.getKey();
-            }
+
+    static {
+        for (DocumentFormatEnum enumValue : DocumentFormatEnum.values()) {
+            intMap.put(enumValue.intValue, enumValue);
+            strMap.put(enumValue.strValue, enumValue);
         }
-        return null;
+    }
+
+    public int getIntValue() {
+        return intValue;
+    }
+
+    public String getStringValue() {
+        return strValue;
+    }
+
+    public static DocumentFormatEnum value(int value) {
+        return (DocumentFormatEnum) intMap.get(value);
+    }
+
+    public static DocumentFormatEnum value(String value) {
+        return (DocumentFormatEnum) strMap.get(value);
     }
 }

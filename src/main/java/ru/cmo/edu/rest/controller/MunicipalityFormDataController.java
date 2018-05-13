@@ -64,24 +64,24 @@ public class MunicipalityFormDataController extends BaseController {
             case region:
             case ministry: {
                 BaseResource resource = new BaseResource();
-                resource.add(linkTo(methodOn(MunicipalityFormDataController.class).getMunicipalityList(id, FormTypeEnum.MUNICIPALITY, false)).withRel("current"));
+                resource.add(linkTo(methodOn(MunicipalityFormDataController.class).getMunicipalityList(id, FormTypeEnum.MUNICIPALITY.getValue(), false)).withRel("current"));
                 resource.setLinkCaption(strings.get("title.municipality"));
                 resources.add(resource);
 
                 BaseResource resourceArchive = new BaseResource();
-                resourceArchive.add(linkTo(methodOn(MunicipalityFormDataController.class).getMunicipalityList(id, FormTypeEnum.MUNICIPALITY, true)).withRel("archive"));
+                resourceArchive.add(linkTo(methodOn(MunicipalityFormDataController.class).getMunicipalityList(id, FormTypeEnum.MUNICIPALITY.getValue(), true)).withRel("archive"));
                 resourceArchive.setLinkCaption(strings.get("title.municipality"));
                 resourceArchive.setLinkSubCaption(strings.get("title.archive"));
                 resources.add(resourceArchive);
 
                 BaseResource resourceAdditional = new BaseResource();
-                resourceAdditional.add(linkTo(methodOn(MunicipalityFormDataController.class).getMunicipalityList(id, FormTypeEnum.ADD_MUNICIPALITY, false)).withRel("additional"));
+                resourceAdditional.add(linkTo(methodOn(MunicipalityFormDataController.class).getMunicipalityList(id, FormTypeEnum.ADD_MUNICIPALITY.getValue(), false)).withRel("additional"));
                 resourceAdditional.setLinkCaption(strings.get("title.municipality"));
                 resourceAdditional.setLinkSubCaption(strings.get("title.additional"));
                 resources.add(resourceAdditional);
 
                 BaseResource resourceAdditionalArchive = new BaseResource();
-                resourceAdditionalArchive.add(linkTo(methodOn(MunicipalityFormDataController.class).getMunicipalityList(id, FormTypeEnum.ADD_MUNICIPALITY, true)).withRel("additional-archive"));
+                resourceAdditionalArchive.add(linkTo(methodOn(MunicipalityFormDataController.class).getMunicipalityList(id, FormTypeEnum.ADD_MUNICIPALITY.getValue(), true)).withRel("additional-archive"));
                 resourceAdditionalArchive.setLinkCaption(strings.get("title.municipality"));
                 resourceAdditionalArchive.setLinkSubCaption(strings.get("title.archive") + " " + strings.get("title.additional"));
                 resources.add(resourceAdditionalArchive);
@@ -89,22 +89,22 @@ public class MunicipalityFormDataController extends BaseController {
             }
             case municipality: {
                 BaseResource resource = new BaseResource();
-                resource.add(linkTo(methodOn(MunicipalityFormDataController.class).getFormList(id, FormTypeEnum.MUNICIPALITY, false)).withRel("current"));
+                resource.add(linkTo(methodOn(MunicipalityFormDataController.class).getFormList(id, FormTypeEnum.MUNICIPALITY.getValue(), false)).withRel("current"));
                 resource.setLinkCaption(strings.get("title.municipality-form"));
                 resources.add(resource);
 
                 BaseResource resourceArchive = new BaseResource();
-                resourceArchive.add(linkTo(methodOn(MunicipalityFormDataController.class).getFormList(id, FormTypeEnum.MUNICIPALITY, true)).withRel("archive"));
+                resourceArchive.add(linkTo(methodOn(MunicipalityFormDataController.class).getFormList(id, FormTypeEnum.MUNICIPALITY.getValue(), true)).withRel("archive"));
                 resourceArchive.setLinkCaption(strings.get("title.archive-municipality-form"));
                 resources.add(resourceArchive);
 
                 BaseResource resourceAdditional = new BaseResource();
-                resourceAdditional.add(linkTo(methodOn(MunicipalityFormDataController.class).getFormList(id, FormTypeEnum.ADD_MUNICIPALITY, false)).withRel("additional"));
+                resourceAdditional.add(linkTo(methodOn(MunicipalityFormDataController.class).getFormList(id, FormTypeEnum.ADD_MUNICIPALITY.getValue(), false)).withRel("additional"));
                 resourceAdditional.setLinkCaption(strings.get("title.add-municipality-form"));
                 resources.add(resourceAdditional);
 
                 BaseResource resourceAdditionalArchive = new BaseResource();
-                resourceAdditionalArchive.add(linkTo(methodOn(EduFormDataController.class).getFormList(id, FormTypeEnum.ADD_MUNICIPALITY, true)).withRel("additional-archive"));
+                resourceAdditionalArchive.add(linkTo(methodOn(EduFormDataController.class).getFormList(id, FormTypeEnum.ADD_MUNICIPALITY.getValue(), true)).withRel("additional-archive"));
                 resourceAdditionalArchive.setLinkCaption(strings.get("title.archive-add-municipality-form"));
                 resources.add(resourceAdditionalArchive);
                 break;
@@ -127,7 +127,7 @@ public class MunicipalityFormDataController extends BaseController {
             MunicipalityResource resource = new MunicipalityResource(t);
             resource.add(linkTo(methodOn(MunicipalityFormDataController.class).getFormList(t.getId(), formTypeId, isArchived)).withRel("form-data"));
             String caption = isArchived ? strings.get("title.archive-municipality-form") : strings.get("title.municipality-form");
-            if (formTypeId == FormTypeEnum.ADD_MUNICIPALITY) {
+            if (FormTypeEnum.valueOf(formTypeId) == FormTypeEnum.ADD_MUNICIPALITY) {
                 caption = isArchived ? strings.get("title.archive-add-municipality-form") : strings.get("title.add-municipality-form");
             }
             resource.setLinkCaption(caption);
@@ -144,7 +144,7 @@ public class MunicipalityFormDataController extends BaseController {
     public ResponseEntity getFormList(@RequestParam int municipalityId,
                                       @RequestParam int formTypeId,
                                       @RequestParam boolean isArchived) {
-        List<FormDataCoreDto> dtos = formDataService.getMunicipalityFormDataDto(municipalityId, formTypeId, isArchived);
+        List<FormDataCoreDto> dtos = formDataService.getFormDataDto(municipalityId, FormTypeEnum.valueOf(formTypeId), isArchived);
         MunicipalityCoreDto municipalityDto = municipalityService.getDto(municipalityId, MunicipalityCoreDto.class);
         List<FormDataResource> resources = dtos.stream().map(t -> {
             FormDataResource resource = new FormDataResource(t);

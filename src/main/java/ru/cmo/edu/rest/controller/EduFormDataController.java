@@ -62,24 +62,24 @@ public class EduFormDataController extends BaseController {
             case region:
             case ministry: {
                 BaseResource resource = new BaseResource();
-                resource.add(linkTo(methodOn(EduFormDataController.class).getMunicipalityList(id, FormTypeEnum.EDU, false)).withRel("current"));
+                resource.add(linkTo(methodOn(EduFormDataController.class).getMunicipalityList(id, FormTypeEnum.EDU.getValue(), false)).withRel("current"));
                 resource.setLinkCaption(strings.get("title.municipality"));
                 resources.add(resource);
 
                 BaseResource resourceArchive = new BaseResource();
-                resourceArchive.add(linkTo(methodOn(EduFormDataController.class).getMunicipalityList(id, FormTypeEnum.EDU, true)).withRel("archive"));
+                resourceArchive.add(linkTo(methodOn(EduFormDataController.class).getMunicipalityList(id, FormTypeEnum.EDU.getValue(), true)).withRel("archive"));
                 resourceArchive.setLinkCaption(strings.get("title.municipality"));
                 resourceArchive.setLinkSubCaption(strings.get("title.archive"));
                 resources.add(resourceArchive);
 
                 BaseResource resourceAdditional = new BaseResource();
-                resourceAdditional.add(linkTo(methodOn(EduFormDataController.class).getMunicipalityList(id, FormTypeEnum.ADD_EDU, false)).withRel("additional"));
+                resourceAdditional.add(linkTo(methodOn(EduFormDataController.class).getMunicipalityList(id, FormTypeEnum.ADD_EDU.getValue(), false)).withRel("additional"));
                 resourceAdditional.setLinkCaption(strings.get("title.municipality"));
                 resourceAdditional.setLinkSubCaption(strings.get("title.additional"));
                 resources.add(resourceAdditional);
 
                 BaseResource resourceAdditionalArchive = new BaseResource();
-                resourceAdditionalArchive.add(linkTo(methodOn(EduFormDataController.class).getMunicipalityList(id, FormTypeEnum.ADD_EDU, true)).withRel("additional-archive"));
+                resourceAdditionalArchive.add(linkTo(methodOn(EduFormDataController.class).getMunicipalityList(id, FormTypeEnum.ADD_EDU.getValue(), true)).withRel("additional-archive"));
                 resourceAdditionalArchive.setLinkCaption(strings.get("title.municipality"));
                 resourceAdditionalArchive.setLinkSubCaption(strings.get("title.archive") + " " + strings.get("title.additional"));
                 resources.add(resourceAdditionalArchive);
@@ -88,24 +88,24 @@ public class EduFormDataController extends BaseController {
             }
             case municipality: {
                 BaseResource resource = new BaseResource();
-                resource.add(linkTo(methodOn(EduFormDataController.class).getEduKindList(id, FormTypeEnum.EDU, false)).withRel("current"));
+                resource.add(linkTo(methodOn(EduFormDataController.class).getEduKindList(id, FormTypeEnum.EDU.getValue(), false)).withRel("current"));
                 resource.setLinkCaption(strings.get("title.edu-kind"));
                 resources.add(resource);
 
                 BaseResource resourceArchive = new BaseResource();
-                resourceArchive.add(linkTo(methodOn(EduFormDataController.class).getEduKindList(id, FormTypeEnum.EDU, true)).withRel("archive"));
+                resourceArchive.add(linkTo(methodOn(EduFormDataController.class).getEduKindList(id, FormTypeEnum.EDU.getValue(), true)).withRel("archive"));
                 resourceArchive.setLinkCaption(strings.get("title.edu-kind"));
                 resourceArchive.setLinkSubCaption(strings.get("title.archive"));
                 resources.add(resourceArchive);
 
                 BaseResource resourceAdditional = new BaseResource();
-                resourceAdditional.add(linkTo(methodOn(EduFormDataController.class).getEduKindList(id, FormTypeEnum.ADD_EDU, false)).withRel("additional"));
+                resourceAdditional.add(linkTo(methodOn(EduFormDataController.class).getEduKindList(id, FormTypeEnum.ADD_EDU.getValue(), false)).withRel("additional"));
                 resourceAdditional.setLinkCaption(strings.get("title.edu-kind"));
                 resourceAdditional.setLinkSubCaption(strings.get("title.additional"));
                 resources.add(resourceAdditional);
 
                 BaseResource resourceAdditionalArchive = new BaseResource();
-                resourceAdditionalArchive.add(linkTo(methodOn(EduFormDataController.class).getEduKindList(id, FormTypeEnum.ADD_EDU, true)).withRel("additional-archive"));
+                resourceAdditionalArchive.add(linkTo(methodOn(EduFormDataController.class).getEduKindList(id, FormTypeEnum.ADD_EDU.getValue(), true)).withRel("additional-archive"));
                 resourceAdditionalArchive.setLinkCaption(strings.get("title.edu-kind"));
                 resourceAdditionalArchive.setLinkSubCaption(strings.get("title.archive") + " " + strings.get("title.additional"));
                 resources.add(resourceAdditionalArchive);
@@ -114,22 +114,22 @@ public class EduFormDataController extends BaseController {
             }
             case edu: {
                 BaseResource resource = new BaseResource();
-                resource.add(linkTo(methodOn(EduFormDataController.class).getFormList(id, FormTypeEnum.EDU, false)).withRel("current"));
+                resource.add(linkTo(methodOn(EduFormDataController.class).getFormList(id, FormTypeEnum.EDU.getValue(), false)).withRel("current"));
                 resource.setLinkCaption(strings.get("title.edu-form"));
                 resources.add(resource);
 
                 BaseResource resourceArchive = new BaseResource();
-                resourceArchive.add(linkTo(methodOn(EduFormDataController.class).getFormList(id, FormTypeEnum.EDU, true)).withRel("archive"));
+                resourceArchive.add(linkTo(methodOn(EduFormDataController.class).getFormList(id, FormTypeEnum.EDU.getValue(), true)).withRel("archive"));
                 resourceArchive.setLinkCaption(strings.get("title.archive-edu-form"));
                 resources.add(resourceArchive);
 
                 BaseResource resourceAdditional = new BaseResource();
-                resourceAdditional.add(linkTo(methodOn(EduFormDataController.class).getFormList(id, FormTypeEnum.ADD_EDU, false)).withRel("additional"));
+                resourceAdditional.add(linkTo(methodOn(EduFormDataController.class).getFormList(id, FormTypeEnum.ADD_EDU.getValue(), false)).withRel("additional"));
                 resourceAdditional.setLinkCaption(strings.get("title.add-edu-form"));
                 resources.add(resourceAdditional);
 
                 BaseResource resourceAdditionalArchive = new BaseResource();
-                resourceAdditionalArchive.add(linkTo(methodOn(EduFormDataController.class).getFormList(id, FormTypeEnum.ADD_EDU, true)).withRel("additional-archive"));
+                resourceAdditionalArchive.add(linkTo(methodOn(EduFormDataController.class).getFormList(id, FormTypeEnum.ADD_EDU.getValue(), true)).withRel("additional-archive"));
                 resourceAdditionalArchive.setLinkCaption(strings.get("title.archive-add-edu-form"));
                 resources.add(resourceAdditionalArchive);
 
@@ -183,7 +183,7 @@ public class EduFormDataController extends BaseController {
             EduResource resource = new EduResource(t);
             resource.add(linkTo(methodOn(EduFormDataController.class).getFormList(t.getId(), formTypeId, isArchived)).withRel("form-data"));
             String caption = isArchived ? strings.get("title.archive-edu-form") : strings.get("title.edu-form");
-            if (formTypeId == FormTypeEnum.ADD_EDU) {
+            if (FormTypeEnum.valueOf(formTypeId) == FormTypeEnum.ADD_EDU) {
                 caption = isArchived ? strings.get("title.archive-add-edu-form") : strings.get("title.add-edu-form");
             }
             resource.setLinkCaption(caption);
@@ -198,7 +198,7 @@ public class EduFormDataController extends BaseController {
     @PreAuthorize("hasAnyAuthority('region', 'ministry', 'municipality', 'edu')")
     @RequestMapping(value = "/form", method = RequestMethod.GET)
     public ResponseEntity getFormList(@RequestParam int eduId, @RequestParam int formTypeId, @RequestParam boolean isArchived) {
-        List<FormDataCoreDto> dtos = formDataService.getEduFormDataDto(eduId, formTypeId, isArchived);
+        List<FormDataCoreDto> dtos = formDataService.getFormDataDto(eduId, FormTypeEnum.valueOf(formTypeId), isArchived);
         EduCoreDto eduDto = eduService.getDto(eduId, EduCoreDto.class);
         List<FormDataResource> resources = dtos.stream().map(t -> {
             FormDataResource resource = new FormDataResource(t);

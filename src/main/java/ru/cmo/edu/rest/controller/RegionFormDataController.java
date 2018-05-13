@@ -58,24 +58,24 @@ public class RegionFormDataController extends BaseController {
         switch(role) {
             case ministry: {
                 BaseResource resource = new BaseResource();
-                resource.add(linkTo(methodOn(RegionFormDataController.class).getRegionList(FormTypeEnum.REGION, false)).withRel("current"));
+                resource.add(linkTo(methodOn(RegionFormDataController.class).getRegionList(FormTypeEnum.REGION.getValue(), false)).withRel("current"));
                 resource.setLinkCaption(strings.get("title.region"));
                 resources.add(resource);
 
                 BaseResource resourceArchive = new BaseResource();
-                resourceArchive.add(linkTo(methodOn(RegionFormDataController.class).getRegionList(FormTypeEnum.REGION, true)).withRel("archive"));
+                resourceArchive.add(linkTo(methodOn(RegionFormDataController.class).getRegionList(FormTypeEnum.REGION.getValue(), true)).withRel("archive"));
                 resourceArchive.setLinkCaption(strings.get("title.region"));
                 resourceArchive.setLinkSubCaption(strings.get("title.archive"));
                 resources.add(resourceArchive);
 
                 BaseResource resourceAdditional = new BaseResource();
-                resourceAdditional.add(linkTo(methodOn(RegionFormDataController.class).getRegionList(FormTypeEnum.ADD_REGION, false)).withRel("additional"));
+                resourceAdditional.add(linkTo(methodOn(RegionFormDataController.class).getRegionList(FormTypeEnum.ADD_REGION.getValue(), false)).withRel("additional"));
                 resourceAdditional.setLinkCaption(strings.get("title.region"));
                 resourceAdditional.setLinkSubCaption(strings.get("title.additional"));
                 resources.add(resourceAdditional);
 
                 BaseResource resourceAdditionalArchive = new BaseResource();
-                resourceAdditionalArchive.add(linkTo(methodOn(RegionFormDataController.class).getRegionList(FormTypeEnum.ADD_REGION, true)).withRel("additional-archive"));
+                resourceAdditionalArchive.add(linkTo(methodOn(RegionFormDataController.class).getRegionList(FormTypeEnum.ADD_REGION.getValue(), true)).withRel("additional-archive"));
                 resourceAdditionalArchive.setLinkCaption(strings.get("title.region"));
                 resourceAdditionalArchive.setLinkSubCaption(strings.get("title.archive") + " " + strings.get("title.additional"));
                 resources.add(resourceAdditionalArchive);
@@ -83,22 +83,22 @@ public class RegionFormDataController extends BaseController {
             }
             case region: {
                 BaseResource resource = new BaseResource();
-                resource.add(linkTo(methodOn(RegionFormDataController.class).getFormList(id, FormTypeEnum.REGION, false)).withRel("current"));
+                resource.add(linkTo(methodOn(RegionFormDataController.class).getFormList(id, FormTypeEnum.REGION.getValue(), false)).withRel("current"));
                 resource.setLinkCaption(strings.get("title.region-form"));
                 resources.add(resource);
 
                 BaseResource resourceArchive = new BaseResource();
-                resourceArchive.add(linkTo(methodOn(RegionFormDataController.class).getFormList(id, FormTypeEnum.REGION, true)).withRel("archive"));
+                resourceArchive.add(linkTo(methodOn(RegionFormDataController.class).getFormList(id, FormTypeEnum.REGION.getValue(), true)).withRel("archive"));
                 resourceArchive.setLinkCaption(strings.get("title.archive-region-form"));
                 resources.add(resourceArchive);
 
                 BaseResource resourceAdditional = new BaseResource();
-                resourceAdditional.add(linkTo(methodOn(RegionFormDataController.class).getFormList(id, FormTypeEnum.ADD_REGION, false)).withRel("additional"));
+                resourceAdditional.add(linkTo(methodOn(RegionFormDataController.class).getFormList(id, FormTypeEnum.ADD_REGION.getValue(), false)).withRel("additional"));
                 resourceAdditional.setLinkCaption(strings.get("title.add-region-form"));
                 resources.add(resourceAdditional);
 
                 BaseResource resourceAdditionalArchive = new BaseResource();
-                resourceAdditionalArchive.add(linkTo(methodOn(RegionFormDataController.class).getFormList(id, FormTypeEnum.ADD_REGION, true)).withRel("additional-archive"));
+                resourceAdditionalArchive.add(linkTo(methodOn(RegionFormDataController.class).getFormList(id, FormTypeEnum.ADD_REGION.getValue(), true)).withRel("additional-archive"));
                 resourceAdditionalArchive.setLinkCaption(strings.get("title.archive-add-region-form"));
                 resources.add(resourceAdditionalArchive);
                 break;
@@ -120,7 +120,7 @@ public class RegionFormDataController extends BaseController {
             RegionResource resource = new RegionResource(t);
             resource.add(linkTo(methodOn(RegionFormDataController.class).getFormList(t.getId(), formTypeId, isArchived)).withRel("form-data"));
             String caption = isArchived ? strings.get("title.archive-region-form") : strings.get("title.region-form");
-            if (formTypeId == FormTypeEnum.ADD_REGION) {
+            if (FormTypeEnum.valueOf(formTypeId) == FormTypeEnum.ADD_REGION) {
                 caption = isArchived ? strings.get("title.archive-add-region-form") : strings.get("title.add-region-form");
             }
             resource.setLinkCaption(caption);
@@ -135,7 +135,7 @@ public class RegionFormDataController extends BaseController {
     public ResponseEntity getFormList(@RequestParam int regionId,
                                       @RequestParam int formTypeId,
                                       @RequestParam boolean isArchived) {
-        List<FormDataCoreDto> dtos = formDataService.getRegionFormDataDto(regionId, formTypeId, isArchived);
+        List<FormDataCoreDto> dtos = formDataService.getFormDataDto(regionId, FormTypeEnum.valueOf(formTypeId), isArchived);
         RegionCoreDto regionDto = regionService.getDto(regionId, RegionCoreDto.class);
         List<FormDataResource> resources = dtos.stream().map(t -> {
             FormDataResource resource = new FormDataResource(t);

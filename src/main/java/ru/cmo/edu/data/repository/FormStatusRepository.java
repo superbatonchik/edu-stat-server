@@ -12,29 +12,17 @@ import java.util.List;
  */
 
 @Repository
-public interface FormStatusRepository extends CrudRepository<FormStatus, Integer> {
+public interface FormStatusRepository extends BaseRepository<FormStatus, Integer> {
 
     @Query(nativeQuery = true)
-    List<FormStatus> getMunicipalityStatusForEduView(/*int regionId*/);
+    List<FormStatus> getMunicipalityStatusForEduView(/*int regionId*/boolean isArchived);
 
     @Query(nativeQuery = true)
-    List<FormStatus> getMunicipalityStatusForEduViewArchived(/*int regionId*/);
+    List<FormStatus> getEduKindStatusForEduView(/*int regionId*/int municipalityId, boolean isArchived);
 
     @Query(nativeQuery = true)
-    List<FormStatus> getEduKindStatusForEduView(/*int regionId*/int municipalityId);
+    List<FormStatus> getEduStatus(/*int regionId*/int municipalityId, int eduKindId, boolean isArchived);
 
     @Query(nativeQuery = true)
-    List<FormStatus> getEduKindStatusForEduViewArchived(/*int regionId*/int municipalityId);
-
-    @Query(nativeQuery = true)
-    List<FormStatus> getEduStatus(/*int regionId*/int municipalityId, int eduKindId);
-
-    @Query(nativeQuery = true)
-    List<FormStatus> getEduStatusArchived(/*int regionId*/int municipalityId, int eduKindId);
-
-    @Query(nativeQuery = true)
-    List<FormStatus> getMunicipalityStatus(/*int regionId*/);
-
-    @Query(nativeQuery = true)
-    List<FormStatus> getMunicipalityStatusArchived(/*int regionId*/);
+    List<FormStatus> getMunicipalityStatus(/*int regionId*/boolean isArchived);
 }

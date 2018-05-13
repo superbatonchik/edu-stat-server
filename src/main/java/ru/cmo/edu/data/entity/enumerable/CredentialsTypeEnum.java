@@ -1,20 +1,33 @@
 package ru.cmo.edu.data.entity.enumerable;
 
-/**
- * Created by to on 08.06.2017.
- */
+import java.util.HashMap;
+import java.util.Map;
+
 public enum CredentialsTypeEnum {
     REGION (1),
     MINISTRY (2),
     MUNICIPALITY (3),
     EDU (4);
 
-    private int val;
+    private int value;
+
     CredentialsTypeEnum(int i) {
-        val = i;
+        value = i;
     }
 
-    public static CredentialsTypeEnum get(int i) {
-        return CredentialsTypeEnum.values()[i - 1];
+    private static final Map<Integer, Enum> map = new HashMap<>();
+
+    static {
+        for (CredentialsTypeEnum enumValue : CredentialsTypeEnum.values()) {
+            map.put(enumValue.value, enumValue);
+        }
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    public static CredentialsTypeEnum valueOf(int value) {
+        return (CredentialsTypeEnum) map.get(value);
     }
 }

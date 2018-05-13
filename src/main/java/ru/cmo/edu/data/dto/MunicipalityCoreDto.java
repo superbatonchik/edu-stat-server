@@ -9,6 +9,9 @@ public class MunicipalityCoreDto {
     private int id;
     private String name;
 
+    public MunicipalityCoreDto() {
+    }
+
     public MunicipalityCoreDto(Municipality m) {
         id = m.getId();
         name = m.getName();

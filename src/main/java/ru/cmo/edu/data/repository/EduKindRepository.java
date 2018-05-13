@@ -11,7 +11,7 @@ import java.util.List;
  * Created by to on 07.06.2017.
  */
 @Repository
-public interface EduKindRepository extends CrudRepository<EduKind, Integer> {
+public interface EduKindRepository extends BaseRepository<EduKind, Integer> {
 
     @Query("select distinct ek from EduKind ek order by ek.name ")
     List<EduKind> findAll();

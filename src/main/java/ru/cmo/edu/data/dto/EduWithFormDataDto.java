@@ -10,6 +10,9 @@ public class EduWithFormDataDto extends EduCoreDto {
 
     private List<FormDataCoreDto> formDatas;
 
+    public EduWithFormDataDto() {
+    }
+
     public EduWithFormDataDto(Edu e) {
         super(e);
         formDatas = e.getEduFormDatas().stream().map(FormDataCoreDto::new).collect(Collectors.toList());

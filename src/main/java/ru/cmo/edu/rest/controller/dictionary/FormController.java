@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import ru.cmo.edu.data.dto.FormCoreDto;
 import ru.cmo.edu.data.entity.MmRegularSummaryForm;
@@ -19,6 +20,7 @@ import ru.cmo.edu.service.JwtService;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,28 +47,31 @@ public class FormController extends BaseController {
 
     @PreAuthorize("hasAnyAuthority('region','ministry','municipality','edu')")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public ResponseEntity getFormList(@RequestParam(required = false) List<Integer> formTypeIds, @RequestHeader HttpHeaders headers) throws InvalidTokenException {
-        Role role = getRole();
+    public ResponseEntity getFormList(@RequestParam(required = false) List<Integer> formTypeIds,
+                                      @RequestParam(required = false) String role,
+                                      @RequestParam(required = false) Integer organizationId,
+                                      @RequestHeader HttpHeaders headers) throws InvalidTokenException {
+        Role userRole = StringUtils.isEmpty(role) ? getRole() : Role.valueOf(role);
         String token = headers.getFirst("Authorization");
-        int userId = jwtService.getUserId(token);
+        int userId = organizationId == null ? jwtService.getUserId(token) : organizationId;
         List<FormCoreDto> dtos = new ArrayList<>();
         List<Integer> blockedIds = new ArrayList<>();
-        switch (role) {
+        switch (userRole) {
             case region:
             case ministry:
+                FormTypeEnum[] formTypeList = formTypeIds == null || formTypeIds.isEmpty()
+                        ? FormTypeEnum.ALL : formTypeIds.stream().map(FormTypeEnum::valueOf).toArray(FormTypeEnum[]::new);
+                dtos = formService.getAllDto(FormCoreDto.class, formTypeList);
+                break;
             case municipality:
-                Integer[] formTypeIdList = formTypeIds == null || formTypeIds.isEmpty()
-                        ? FormTypeEnum.ALL : formTypeIds.stream().toArray(Integer[]::new);
-                dtos = formService.getAllDto(FormCoreDto.class, formTypeIdList);
-                if (role.equals(Role.municipality)) {
-                    blockedIds = formRepository.findBlockedIdsByMunicipality(userId).stream()
-                            .map(t -> (int)t[0])
-                            .collect(Collectors.toList());
-                }
+                dtos = formService.getAllDto(FormCoreDto.class, FormTypeEnum.MUNICIPALITY, FormTypeEnum.ADD_MUNICIPALITY);
+                blockedIds = formRepository.findBlockedIdsByMunicipalityIds(Collections.singleton(userId)).stream()
+                        .map(t -> (int)t[0])
+                        .collect(Collectors.toList());
                 break;
             case edu:
                 dtos = formService.getAllDtoByEdu(FormCoreDto.class, userId);
-                blockedIds = formRepository.findBlockedIdsByEdu(userId).stream()
+                blockedIds = formRepository.findBlockedIdsByEduIds(Collections.singleton(userId)).stream()
                         .map(t -> (int)t[0])
                         .collect(Collectors.toList());
                 break;
