@@ -74,4 +74,16 @@ public class BaseFormDataCoreDto {
     public void setForm(FormCoreDto form) {
         this.form = form;
     }
+
+    @Override
+    public String toString() {
+        return "BaseFormDataCoreDto{" +
+                "id=" + id +
+                ", sendDate=" + sendDate +
+                ", status=" + status +
+                ", fileId=" + fileId +
+                ", documentFormat='" + documentFormat + '\'' +
+                ", form=" + form +
+                '}';
+    }
 }

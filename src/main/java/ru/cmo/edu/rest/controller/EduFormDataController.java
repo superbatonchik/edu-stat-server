@@ -114,22 +114,22 @@ public class EduFormDataController extends BaseController {
             }
             case edu: {
                 BaseResource resource = new BaseResource();
-                resource.add(linkTo(methodOn(EduFormDataController.class).getFormList(id, FormTypeEnum.EDU.getValue(), false)).withRel("current"));
+                resource.add(linkTo(methodOn(EduFormDataController.class).getFormList(id, FormTypeEnum.EDU.getValue(), false)).withRel("current.form-data"));
                 resource.setLinkCaption(strings.get("title.edu-form"));
                 resources.add(resource);
 
                 BaseResource resourceArchive = new BaseResource();
-                resourceArchive.add(linkTo(methodOn(EduFormDataController.class).getFormList(id, FormTypeEnum.EDU.getValue(), true)).withRel("archive"));
+                resourceArchive.add(linkTo(methodOn(EduFormDataController.class).getFormList(id, FormTypeEnum.EDU.getValue(), true)).withRel("archive.form-data"));
                 resourceArchive.setLinkCaption(strings.get("title.archive-edu-form"));
                 resources.add(resourceArchive);
 
                 BaseResource resourceAdditional = new BaseResource();
-                resourceAdditional.add(linkTo(methodOn(EduFormDataController.class).getFormList(id, FormTypeEnum.ADD_EDU.getValue(), false)).withRel("additional"));
+                resourceAdditional.add(linkTo(methodOn(EduFormDataController.class).getFormList(id, FormTypeEnum.ADD_EDU.getValue(), false)).withRel("additional.form-data"));
                 resourceAdditional.setLinkCaption(strings.get("title.add-edu-form"));
                 resources.add(resourceAdditional);
 
                 BaseResource resourceAdditionalArchive = new BaseResource();
-                resourceAdditionalArchive.add(linkTo(methodOn(EduFormDataController.class).getFormList(id, FormTypeEnum.ADD_EDU.getValue(), true)).withRel("additional-archive"));
+                resourceAdditionalArchive.add(linkTo(methodOn(EduFormDataController.class).getFormList(id, FormTypeEnum.ADD_EDU.getValue(), true)).withRel("additional-archive.form-data"));
                 resourceAdditionalArchive.setLinkCaption(strings.get("title.archive-add-edu-form"));
                 resources.add(resourceAdditionalArchive);
 

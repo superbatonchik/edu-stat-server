@@ -11,22 +11,8 @@ public class RegionFormData extends BaseFormData {
     private int regionId;
     private Region region;
 
-    @Id
-    @SequenceGenerator(name="region_form_data_generator", sequenceName = "region_form_data_id_seq", allocationSize=50)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "region_form_data_generator")
-    @Column(name = "id")
-    @Override
-    public int getId() {
-        return super.id;
-    }
-
-    @Override
-    public void setId(int id) {
-        super.id = id;
-    }
-
     @Basic
-    @Column(name = "region_id", insertable = false, updatable = false)
+    @Column(name = "region_id")
     public int getRegionId() {
         return regionId;
     }
@@ -53,7 +39,7 @@ public class RegionFormData extends BaseFormData {
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "region_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "region_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
     public Region getRegion() {
         return region;
     }

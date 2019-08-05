@@ -58,7 +58,7 @@ public class FormDataService {
         int formTypeId = formData.getForm().getFormTypeId();
         FormTypeEnum formType = FormTypeEnum.valueOf(formTypeId);
         BaseFormData data = formDataFactory.create(formType, formData.getOrganizationId());
-        data.setDocumentFormatId(DocumentFormatEnum.XLSX.getIntValue());
+        data.setDocumentFormatId(DocumentFormatEnum.value(formData.getDocumentFormat()).getIntValue());
         data.setFileId(formData.getFileId());
         data.setFormId(formData.getForm().getId());
         data.setSendDate(formData.getSendDate());
@@ -69,8 +69,19 @@ public class FormDataService {
         } else {
             logger.info("...creating new form data");
         }
+        logger.debug(data.toString());
         FormDataRepository formDataRepository = formDataRepositoryHolder.get(formType);
-        formDataRepository.save(data);
+        if (FormTypeEnum.isEduType(formType)) {
+            EduFormData eData = (EduFormData) data;
+            formDataRepository.save(eData);
+        } else if (FormTypeEnum.isMunicipalityType(formType)) {
+            MunicipalityFormData eData = (MunicipalityFormData) data;
+            formDataRepository.save(eData);
+        } else if (FormTypeEnum.isRegionType(formType)) {
+            RegionFormData eData = (RegionFormData) data;
+            formDataRepository.save(eData);
+        }
+        formData.setId(data.getId());
         logger.error("...completed successfully");
     }
 

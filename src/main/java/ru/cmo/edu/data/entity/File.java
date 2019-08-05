@@ -16,8 +16,7 @@ public class File {
     private String fileName;
 
     @Id
-    @SequenceGenerator(name="file_generator", sequenceName = "file_id_seq", allocationSize=50)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "file_generator")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     public int getId() {
         return id;

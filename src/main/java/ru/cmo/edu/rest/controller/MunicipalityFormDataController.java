@@ -89,22 +89,22 @@ public class MunicipalityFormDataController extends BaseController {
             }
             case municipality: {
                 BaseResource resource = new BaseResource();
-                resource.add(linkTo(methodOn(MunicipalityFormDataController.class).getFormList(id, FormTypeEnum.MUNICIPALITY.getValue(), false)).withRel("current"));
+                resource.add(linkTo(methodOn(MunicipalityFormDataController.class).getFormList(id, FormTypeEnum.MUNICIPALITY.getValue(), false)).withRel("current.form-data"));
                 resource.setLinkCaption(strings.get("title.municipality-form"));
                 resources.add(resource);
 
                 BaseResource resourceArchive = new BaseResource();
-                resourceArchive.add(linkTo(methodOn(MunicipalityFormDataController.class).getFormList(id, FormTypeEnum.MUNICIPALITY.getValue(), true)).withRel("archive"));
+                resourceArchive.add(linkTo(methodOn(MunicipalityFormDataController.class).getFormList(id, FormTypeEnum.MUNICIPALITY.getValue(), true)).withRel("archive.form-data"));
                 resourceArchive.setLinkCaption(strings.get("title.archive-municipality-form"));
                 resources.add(resourceArchive);
 
                 BaseResource resourceAdditional = new BaseResource();
-                resourceAdditional.add(linkTo(methodOn(MunicipalityFormDataController.class).getFormList(id, FormTypeEnum.ADD_MUNICIPALITY.getValue(), false)).withRel("additional"));
+                resourceAdditional.add(linkTo(methodOn(MunicipalityFormDataController.class).getFormList(id, FormTypeEnum.ADD_MUNICIPALITY.getValue(), false)).withRel("additional.form-data"));
                 resourceAdditional.setLinkCaption(strings.get("title.add-municipality-form"));
                 resources.add(resourceAdditional);
 
                 BaseResource resourceAdditionalArchive = new BaseResource();
-                resourceAdditionalArchive.add(linkTo(methodOn(EduFormDataController.class).getFormList(id, FormTypeEnum.ADD_MUNICIPALITY.getValue(), true)).withRel("additional-archive"));
+                resourceAdditionalArchive.add(linkTo(methodOn(EduFormDataController.class).getFormList(id, FormTypeEnum.ADD_MUNICIPALITY.getValue(), true)).withRel("additional-archive.form-data"));
                 resourceAdditionalArchive.setLinkCaption(strings.get("title.archive-add-municipality-form"));
                 resources.add(resourceAdditionalArchive);
                 break;

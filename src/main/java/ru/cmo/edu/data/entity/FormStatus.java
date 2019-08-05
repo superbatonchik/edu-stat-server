@@ -30,8 +30,8 @@ import javax.persistence.*;
                         "from edu_form_data fd " +
                         "join edu eo on eo.id = fd.edu_id " +
                         "where " +
-                        "(extract(year from fd.send_date) = extract(year from now()) and ?1) or " +
-                        "(extract(year from fd.send_date) = extract(year from now()) and ?1) " +
+                        "(extract(year from fd.send_date) = extract(year from now()) and false=?1) or " +
+                        "(extract(year from fd.send_date) < extract(year from now()) and true=?1) " +
                         "group by eo.municipality_id", resultSetMapping = "formStatusMapping"),
         @NamedNativeQuery(
                 name = "FormStatus.getEduKindStatusForEduView",
@@ -46,8 +46,8 @@ import javax.persistence.*;
                         "where " +
                         "eo.municipality_id = ?1 and " +
                         "(" +
-                        "(extract(year from fd.send_date) = extract(year from now()) and ?2) or " +
-                        "(extract(year from fd.send_date) = extract(year from now()) and ?2)" +
+                        "(extract(year from fd.send_date) = extract(year from now()) and false=?2) or " +
+                        "(extract(year from fd.send_date) < extract(year from now()) and true=?2)" +
                         ") " +
                         "group by eo.edu_kind_id", resultSetMapping = "formStatusMapping"),
         @NamedNativeQuery(
@@ -64,8 +64,8 @@ import javax.persistence.*;
                         "eo.municipality_id = ?1 and " +
                         "eo.edu_kind_id = ?2 and " +
                         "(" +
-                        "(extract(year from fd.send_date) = extract(year from now()) and ?3) or " +
-                        "(extract(year from fd.send_date) = extract(year from now()) and ?3)" +
+                        "(extract(year from fd.send_date) = extract(year from now()) and false=?3) or " +
+                        "(extract(year from fd.send_date) < extract(year from now()) and true=?3)" +
                         ") " +
                         "group by eo.id", resultSetMapping = "formStatusMapping"),
         @NamedNativeQuery(
@@ -78,8 +78,8 @@ import javax.persistence.*;
                         "  count(CASE WHEN fd.status = 3 THEN 1 END) AS expired_errors " +
                         "FROM municipality_form_data fd " +
                         "WHERE " +
-                        "(extract(year from fd.send_date) = extract(year from now()) and ?1) or " +
-                        "(extract(year from fd.send_date) = extract(year from now()) and ?1) " +
+                        "(extract(year from fd.send_date) = extract(year from now()) and false=?1) or " +
+                        "(extract(year from fd.send_date) < extract(year from now()) and true=?1) " +
                         "GROUP BY fd.municipality_id")
 })
 public class FormStatus {

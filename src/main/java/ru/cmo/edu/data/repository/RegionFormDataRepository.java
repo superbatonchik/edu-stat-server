@@ -16,7 +16,7 @@ public interface RegionFormDataRepository extends FormDataRepository<RegionFormD
 
     @Override
     @Query("select rf from RegionFormData rf join rf.form f " +
-            "where rf.regionId = ?1 and f.formTypeId = ?2 and ((YEAR(rf.sendDate) = YEAR(CURRENT_DATE) and true = ?3) or (YEAR(rf.sendDate) < YEAR(CURRENT_DATE) and true = ?3)) " +
+            "where rf.regionId = ?1 and f.formTypeId = ?2 and ((YEAR(rf.sendDate) = YEAR(CURRENT_DATE) and false = ?3) or (YEAR(rf.sendDate) < YEAR(CURRENT_DATE) and true = ?3)) " +
             "order by rf.sendDate desc")
     List<RegionFormData> findAll(int orgId, int formTypeId, boolean isArchived);
 

@@ -29,6 +29,7 @@ public class Form {
     private Set<Municipality> blockedMunicipalities;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     public int getId() {
         return id;
@@ -199,5 +200,21 @@ public class Form {
 
     public void setBlockedMunicipalities(Set<Municipality> blockedMunicipalities) {
         this.blockedMunicipalities = blockedMunicipalities;
+    }
+
+    @Override
+    public String toString() {
+        return "Form{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", submissionDate=" + submissionDate +
+                ", checkFileMd5='" + checkFileMd5 + '\'' +
+                ", formTypeId=" + formTypeId +
+                ", templateFileId=" + templateFileId +
+                ", checkFileId=" + checkFileId +
+                ", isCheckRequired=" + isCheckRequired +
+                ", isNotificationHidden=" + isNotificationHidden +
+                ", formType=" + formType +
+                '}';
     }
 }

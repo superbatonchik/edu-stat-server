@@ -16,7 +16,7 @@ public interface MunicipalityFormDataRepository extends FormDataRepository<Munic
 
     @Override
     @Query("select mf from MunicipalityFormData mf join mf.form f " +
-            "where mf.municipalityId = ?1 and f.formTypeId = ?2 and ((YEAR(mf.sendDate) = YEAR(CURRENT_DATE) and true = ?3) or (YEAR(mf.sendDate) < YEAR(CURRENT_DATE) and true = ?3)) " +
+            "where mf.municipalityId = ?1 and f.formTypeId = ?2 and ((YEAR(mf.sendDate) = YEAR(CURRENT_DATE) and false = ?3) or (YEAR(mf.sendDate) < YEAR(CURRENT_DATE) and true = ?3)) " +
             "order by mf.sendDate desc")
     List<MunicipalityFormData> findAll(int orgId, int formTypeId, boolean isArchived);
 

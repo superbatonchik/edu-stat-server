@@ -1,5 +1,7 @@
 package ru.cmo.edu.data.entity;
 
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -19,6 +21,7 @@ public class BaseFormData {
     private File file;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     public int getId() {
         return id;
@@ -29,7 +32,7 @@ public class BaseFormData {
     }
 
     @Basic
-    @Column(name = "document_format_id", insertable = false, updatable = false)
+    @Column(name = "document_format_id")
     public int getDocumentFormatId() {
         return documentFormatId;
     }
@@ -39,7 +42,7 @@ public class BaseFormData {
     }
 
     @Basic
-    @Column(name = "form_id", insertable = false, updatable = false)
+    @Column(name = "form_id")
     public int getFormId() {
         return formId;
     }
@@ -69,7 +72,7 @@ public class BaseFormData {
     }
 
     @Basic
-    @Column(name = "file_id", insertable = false, updatable = false)
+    @Column(name = "file_id")
     public int getFileId() {
         return fileId;
     }
@@ -107,7 +110,7 @@ public class BaseFormData {
     }
 
     @ManyToOne
-    @JoinColumn(name = "document_format_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "document_format_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
     public DocumentFormat getDocumentFormat() {
         return documentFormat;
     }
@@ -117,7 +120,7 @@ public class BaseFormData {
     }
 
     @ManyToOne
-    @JoinColumn(name = "form_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "form_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
     public Form getForm() {
         return form;
     }
@@ -127,12 +130,27 @@ public class BaseFormData {
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "file_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "file_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
     public File getFile() {
         return file;
     }
 
     public void setFile(File file) {
         this.file = file;
+    }
+
+    @Override
+    public String toString() {
+        return "BaseFormData{" +
+                "id=" + id +
+                ", documentFormatId=" + documentFormatId +
+                ", formId=" + formId +
+                ", sendDate=" + sendDate +
+                ", status=" + status +
+                ", fileId=" + fileId +
+                ", documentFormat=" + documentFormat +
+                ", form=" + form +
+                ", file=" + file +
+                '}';
     }
 }

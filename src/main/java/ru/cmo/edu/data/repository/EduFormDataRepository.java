@@ -16,7 +16,7 @@ public interface EduFormDataRepository extends FormDataRepository<EduFormData, I
 
     @Override
     @Query("select ef from EduFormData ef join ef.form f " +
-            "where ef.eduId = ?1 and f.formTypeId = ?2 and ((YEAR(ef.sendDate) = YEAR(CURRENT_DATE) and true = ?3) or (YEAR(ef.sendDate) < YEAR(CURRENT_DATE) and true = ?3)) " +
+            "where ef.eduId = ?1 and f.formTypeId = ?2 and ((YEAR(ef.sendDate) = YEAR(CURRENT_DATE) and false = ?3) or (YEAR(ef.sendDate) < YEAR(CURRENT_DATE) and true = ?3)) " +
             "order by ef.sendDate desc")
     List<EduFormData> findAll(int orgId, int formTypeId, boolean isArchived);
 

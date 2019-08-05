@@ -17,6 +17,7 @@ public class Query {
     private Credentials credentials;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "query_id")
     public int getQueryId() {
         return queryId;

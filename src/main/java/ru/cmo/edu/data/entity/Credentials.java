@@ -56,8 +56,7 @@ public class Credentials {
     }
 
     @Id
-    @SequenceGenerator(name="credentials_generator", sequenceName = "credentials_credentials_id_seq", allocationSize=50)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "credentials_generator")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     public int getId() {
         return id;

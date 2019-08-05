@@ -41,4 +41,12 @@ public class FormDataCoreDto extends BaseFormDataCoreDto {
     public void setOrganizationId(int organizationId) {
         this.organizationId = organizationId;
     }
+
+    @Override
+    public String toString() {
+        return "FormDataCoreDto{" +
+                "organizationId=" + organizationId +
+                ", " + super.toString() +
+                '}';
+    }
 }
